@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>チームメンバー紹介Wiki</title>
+    <style>
+        /* 画面全体のなんか */
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+        }
+        .member-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        /* メンバーの見た目的なやつ */
+        .member-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+        /* ちょい演出的な？ */
+        .member-card:hover {
+            transform: translateY(-5px);
+        }
+        .member-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>チームメンバー紹介</h1>
+
+    <div class="member-grid">
+        <div class="member-card"><div class="member-name">あき</div></div>
+        <div class="member-card"><div class="member-name">はぐれメタル</div></div>
+        <div class="member-card"><div class="member-name">音響</div></div>
+        <div class="member-card"><div class="member-name">弾き語り</div></div>
+        <div class="member-card"><div class="member-name">シニスター</div></div>
+        <div class="member-card"><div class="member-name">あんころ</div></div>
+        <div class="member-card"><div class="member-name">たんめん</div></div>
+        <div class="member-card"><div class="member-name">とき</div></div>
+        <div class="member-card"><div class="member-name">ぽこチワワ</div></div>
+        <div class="member-card"><div class="member-name">ぽたとふらい</div></div>
+        <div class="member-card"><div class="member-name">みーくん</div></div>
+        <div class="member-card"><div class="member-name">ゆー</div></div>
+        <div class="member-card"><div class="member-name">ワールワールド</div></div>
+        <div class="member-card"><div class="member-name">ホコリ</div></div>
+        <div class="member-card"><div class="member-name">ちびかわ</div></div>
+    </div>
+
+</body>
+</html>
