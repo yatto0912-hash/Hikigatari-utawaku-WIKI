@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>チームメンバー紹介Wiki</title>
     <style>
-        /* 画面全体のなんか */
+        /* 画面全体のスタイル */
         body {
             font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
             background-color: #f5f7fa;
@@ -25,18 +25,26 @@
             max-width: 1000px;
             margin: 0 auto;
         }
-        /* メンバーの見た目的なやつ */
+        /* リンクをカード全体に適応し、下線を消す設定 */
+        .member-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        /* メンバーカードの見た目 */
         .member-card {
             background-color: #ffffff;
             border-radius: 8px;
             padding: 20px;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
         }
-        /* ちょい演出的な？ */
+        /* マウスを乗せたときの演出 */
         .member-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            background-color: #f8fafd;
         }
         .member-name {
             font-size: 1.1rem;
@@ -50,21 +58,21 @@
     <h1>チームメンバー紹介</h1>
 
     <div class="member-grid">
-        <div class="member-card"><div class="member-name">あき</div></div>
-        <div class="member-card"><div class="member-name">はぐれメタル</div></div>
-        <div class="member-card"><div class="member-name">音響</div></div>
-        <div class="member-card"><div class="member-name">弾き語り</div></div>
-        <div class="member-card"><div class="member-name">シニスター</div></div>
-        <div class="member-card"><div class="member-name">あんころ</div></div>
-        <div class="member-card"><div class="member-name">たんめん</div></div>
-        <div class="member-card"><div class="member-name">とき</div></div>
-        <div class="member-card"><div class="member-name">ぽこチワワ</div></div>
-        <div class="member-card"><div class="member-name">ぽたとふらい</div></div>
-        <div class="member-card"><div class="member-name">みーくん</div></div>
-        <div class="member-card"><div class="member-name">ゆー</div></div>
-        <div class="member-card"><div class="member-name">ワールワールド</div></div>
-        <div class="member-card"><div class="member-name">ホコリ</div></div>
-        <div class="member-card"><div class="member-name">ちびかわ</div></div>
+        <a href="profile/aki.html" class="member-link"><div class="member-card"><div class="member-name">あき</div></div></a>
+        <a href="profile/hagure.html" class="member-link"><div class="member-card"><div class="member-name">はぐれメタル</div></div></a>
+        <a href="profile/onkyo.html" class="member-link"><div class="member-card"><div class="member-name">音響</div></div></a>
+        <a href="profile/hikigatari.html" class="member-link"><div class="member-card"><div class="member-name">弾き語り</div></div></a>
+        <a href="profile/sinister.html" class="member-link"><div class="member-card"><div class="member-name">シニスター</div></div></a>
+        <a href="profile/ankoro.html" class="member-link"><div class="member-card"><div class="member-name">あんころ</div></div></a>
+        <a href="profile/tanmen.html" class="member-link"><div class="member-card"><div class="member-name">たんめん</div></div></a>
+        <a href="profile/toki.html" class="member-link"><div class="member-card"><div class="member-name">とき</div></div></a>
+        <a href="profile/pokochiva.html" class="member-link"><div class="member-card"><div class="member-name">ぽこチワワ</div></div></a>
+        <a href="profile/potatofly.html" class="member-link"><div class="member-card"><div class="member-name">ぽたとふらい</div></div></a>
+        <a href="profile/mikun.html" class="member-link"><div class="member-card"><div class="member-name">みーくん</div></div></a>
+        <a href="profile/yu.html" class="member-link"><div class="member-card"><div class="member-name">ゆー</div></div></a>
+        <a href="profile/walworld.html" class="member-link"><div class="member-card"><div class="member-name">ワールワールド</div></div></a>
+        <a href="profile/hokori.html" class="member-link"><div class="member-card"><div class="member-name">ホコリ</div></div></a>
+        <a href="profile/chibikava.html" class="member-link"><div class="member-card"><div class="member-name">ちびかわ</div></div></a>
     </div>
 
 </body>
