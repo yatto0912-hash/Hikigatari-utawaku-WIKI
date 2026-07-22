@@ -1,79 +1,132 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>チームメンバー紹介Wiki</title>
-    <style>
-        /* 画面全体のスタイル */
-        body {
-            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
-            background-color: #f5f7fa;
-            color: #333;
-            margin: 0;
-            padding: 40px 20px;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 40px;
-            color: #2c3e50;
-        }
-        .member-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        /* リンクをカード全体に適応し、下線を消す設定 */
-        .member-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-        /* メンバーカードの見た目 */
-        .member-card {
-            background-color: #ffffff;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
-        }
-        /* マウスを乗せたときの演出 */
-        .member-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            background-color: #f8fafd;
-        }
-        .member-name {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>弾き語り・歌枠 WIKI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #0b0c10;
+      color: #f8f8f8;
+    }
+    header {
+      padding: 16px 32px;
+      background: #14161f;
+      border-bottom: 1px solid #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #7bdcff;
+    }
+    main {
+      padding: 40px 32px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .hero h1 {
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+    }
+    .section {
+      margin-top: 40px;
+    }
+    .section h2 {
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+      border-left: 4px solid #7bdcff;
+      padding-left: 8px;
+    }
+    /* メンバー一覧を並べるグリッド */
+    .member-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    /* リンクをカード全体に適応させる設定 */
+    .member-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    /* 友達のデザインベースのメンバーカード */
+    .member-card {
+      background: #14161f;
+      border: 1px solid #2a2d3a;
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
+    }
+    /* マウスを乗せたときに光る演出 */
+    .member-link:hover .member-card {
+      transform: translateY(-5px);
+      border-color: #7bdcff;
+      background-color: #1a1d29;
+    }
+    .member-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #f8f8f8;
+    }
+    .member-sub {
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 8px;
+    }
+    footer {
+      margin-top: 60px;
+      padding: 16px 32px;
+      font-size: 0.8rem;
+      color: #888;
+      border-top: 1px solid #333;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
 
-    <h1>チームメンバー紹介</h1>
+  <header>
+    <div class="logo">ひきがたりうたわくWIKI</div>
+  </header>
 
-    <div class="member-grid">
-        <a href="profile/aki.html" class="member-link"><div class="member-card"><div class="member-name">あき</div></div></a>
-        <a href="profile/hagure.html" class="member-link"><div class="member-card"><div class="member-name">はぐれメタル</div></div></a>
-        <a href="profile/onkyo.html" class="member-link"><div class="member-card"><div class="member-name">音響</div></div></a>
-        <a href="profile/hikigatari.html" class="member-link"><div class="member-card"><div class="member-name">弾き語り</div></div></a>
-        <a href="profile/sinister.html" class="member-link"><div class="member-card"><div class="member-name">シニスター</div></div></a>
-        <a href="profile/ankoro.html" class="member-link"><div class="member-card"><div class="member-name">あんころ</div></div></a>
-        <a href="profile/tanmen.html" class="member-link"><div class="member-card"><div class="member-name">たんめん</div></div></a>
-        <a href="profile/toki.html" class="member-link"><div class="member-card"><div class="member-name">とき</div></div></a>
-        <a href="profile/pokochiva.html" class="member-link"><div class="member-card"><div class="member-name">ぽこチワワ</div></div></a>
-        <a href="profile/potatofly.html" class="member-link"><div class="member-card"><div class="member-name">ぽたとふらい</div></div></a>
-        <a href="profile/mikun.html" class="member-link"><div class="member-card"><div class="member-name">みーくん</div></div></a>
-        <a href="profile/yu.html" class="member-link"><div class="member-card"><div class="member-name">ゆー</div></div></a>
-        <a href="profile/walworld.html" class="member-link"><div class="member-card"><div class="member-name">ワールワールド</div></div></a>
-        <a href="profile/hokori.html" class="member-link"><div class="member-card"><div class="member-name">ホコリ</div></div></a>
-        <a href="profile/chibikava.html" class="member-link"><div class="member-card"><div class="member-name">ちびかわ</div></div></a>
-    </div>
+  <main>
+    <section class="hero">
+      <h1>TEAM MEMBERS</h1>
+      <p>チームメンバーの一覧です。カードをクリックすると詳細プロフィールが見られます。</p>
+    </section>
+
+    <section class="section">
+      <h2>メンバー一覧</h2>
+      <div class="member-grid">
+        <a href="profile/aki.html" class="member-link"><div class="member-card"><div class="member-name">あき</div><div class="member-sub">PROFILE →</div></div></a>
+        <a href="profile/hagure.html" class="member-link"><div class="member-card"><div class="member-name">はぐれメタル</div><div class="member-sub">PROFILE →</div></div></a>
+        <a href="profile/onkyo.html" class="member-link"><div class="member-card"><div class="member-name">音響</div><div class="member-sub">PROFILE →</div></div></a>
+        <a href="profile/hikigatari.html" class="member-link"><div class="member-card"><div class="member-name">弾き語り</div><div class="member-sub">PROFILE →</div></div></a>
+        <a href="profile/sinister.html" class="member-link"><div class="member-card"><div class="member-name">シニスター</div><div class="member-sub">PROFILE →</div></div></a>
+        <a href="profile/ankoro.html" class="member-link"><div class="member-card"><div class="member-name">あんころ</div><div class="member-sub">PROFILE →</div></div></a>
+        <a href="profile/tanmen.html" class="member-link"><div class="member-card"><div class="member-name">たんめん</div><div class="member-sub">PROFILE →</div></div></a>
+        <a href="profile/toki.html" class="member-link"><div class="member-card"><div class="member-name">とき</div><div class="member-sub">PROFILE →</div></div></a>
+        <a href="profile/pokochiva.html" class="member-link"><div class="member-card"><div class="member-name">ぽこチワワ</div><div class="member-sub">PROFILE →</div></div></a>
+        <a href="profile/potatofly.html" class="member-link"><div class="member-card"><div class="member-name">ぽたとふらい</div><div class="member-sub">PROFILE →</div></div></a>
+        <a href="profile/mikun.html" class="member-link"><div class="member-card"><div class="member-name">みーくん</div><div class="member-sub">PROFILE →</div></div></a>
+        <a href="profile/yu.html" class="member-link"><div class="member-card"><div class="member-name">ゆー</div><div class="member-sub">PROFILE →</div></div></a>
+        <a href="profile/walworld.html" class="member-link"><div class="member-card"><div class="member-name">ワールワールド</div><div class="member-sub">PROFILE →</div></div></a>
+        <a href="profile/hokori.html" class="member-link"><div class="member-card"><div class="member-name">ホコリ</div><div class="member-sub">PROFILE →</div></div></a>
+        <a href="profile/chibikava.html" class="member-link"><div class="member-card"><div class="member-name">ちびかわ</div><div class="member-sub">PROFILE →</div></div></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 ひきがたりうたわくWIKI
+  </footer>
 
 </body>
 </html>
