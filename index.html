@@ -30,10 +30,9 @@
       font-size: 1.2rem;
     }
     .logo span {
-      color: #fff;
+      color: #888;
       font-size: 0.8rem;
       font-weight: normal;
-      margin-left: 8px;
     }
 
     /* Wikipedia特有の2カラム（左右分割）レイアウト */
@@ -106,7 +105,7 @@
       margin-bottom: 24px;
     }
 
-    /* メインビジュアル（追加したトップ画像エリア） */
+    /* メインビジュアル（トップ画像エリア） */
     .top-image-container {
       width: 100%;
       max-height: 250px;
@@ -199,7 +198,11 @@
 <body>
 
   <header>
-    <div class="logo">ひきがたりうたわくWIKI <span>インターネット百科事典</span></div>
+    <!-- ★自作ロゴ画像(ROGO.png)を読み込む設定に更新しました -->
+    <div class="logo" style="display: flex; align-items: center; gap: 12px;">
+      <img src="images/ROGO.png" alt="ひきがたりうたわくWIKI" style="height: 40px; width: auto; display: block;">
+      <span>| インターネット百科事典</span>
+    </div>
   </header>
 
   <div class="wiki-container">
@@ -209,8 +212,8 @@
         <div class="sidebar-title">案内</div>
         <ul class="sidebar-links">
           <li><a href="#">メインページ</a></li>
-          <!-- ★オープンチャットのURLを設定しました -->
-          <li><a href="https://line.me/ti/g2/Zx5Nu_cBQDUT0xmFLjvVW3meBWEztR9n3BZ5Sw?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank">公式オープンチャット</a></li>
+          <!-- ★設定したLINEオープンチャットのURL -->
+          <li><a href="https://line.me" target="_blank">公式オープンチャット</a></li>
           <li><a href="#">最近の更新</a></li>
         </ul>
       </div>
