@@ -5,34 +5,89 @@
   <title>弾き語り・歌枠 WIKI - Wikipedia風</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    /* 全体のスタイル設定：友達の黒青カラーを継承 */
+    /* ===== テーマ用カラー変数（ダークがデフォルト） ===== */
+    :root {
+      --bg-body: #0b0c10;
+      --bg-header: #14161f;
+      --bg-sidebar: #0b0c10;
+      --bg-card: #14161f;
+      --bg-card-hover: #1a1d29;
+      --border-color: #2a2d3a;
+      --border-line: #333;
+      --text-main: #f8f8f8;
+      --text-title: #fff;
+      --text-muted: #888;
+      --text-footer: #666;
+      --accent: #7bdcff;
+    }
+
+    /* ===== ライトテーマ ===== */
+    body.light-theme {
+      --bg-body: #ffffff;
+      --bg-header: #f5f5f7;
+      --bg-sidebar: #ffffff;
+      --bg-card: #f5f5f7;
+      --bg-card-hover: #eaeaea;
+      --border-color: #dcdcdc;
+      --border-line: #ddd;
+      --text-main: #1a1a1a;
+      --text-title: #111;
+      --text-muted: #666;
+      --text-footer: #888;
+      --accent: #0077b6;
+    }
+
+    /* 全体のスタイル設定 */
     body {
       margin: 0;
       font-family: system-ui, -apple-system, sans-serif;
-      background: #0b0c10;
-      color: #f8f8f8;
+      background: var(--bg-body);
+      color: var(--text-main);
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      transition: background 0.2s, color 0.2s;
     }
     header {
       padding: 12px 24px;
-      background: #14161f;
-      border-bottom: 1px solid #333;
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border-line);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      transition: background 0.2s, border-color 0.2s;
     }
     .logo {
       font-weight: 700;
       letter-spacing: 0.05em;
-      color: #7bdcff;
+      color: var(--accent);
       font-size: 1.2rem;
     }
     .logo span {
-      color: #888;
+      color: var(--text-muted);
       font-size: 0.8rem;
       font-weight: normal;
+    }
+
+    /* テーマ切り替えボタン */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 6px 14px;
+      cursor: pointer;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .theme-toggle:hover {
+      border-color: var(--accent);
+    }
+    .theme-toggle .icon {
+      font-size: 1rem;
     }
 
     /* Wikipedia特有の2カラム（左右分割）レイアウト */
@@ -48,19 +103,20 @@
     .wiki-sidebar {
       width: 200px;
       padding: 24px;
-      border-right: 1px solid #2a2d3a;
-      background: #0b0c10;
+      border-right: 1px solid var(--border-color);
+      background: var(--bg-sidebar);
+      transition: background 0.2s, border-color 0.2s;
     }
     .sidebar-section {
       margin-bottom: 24px;
     }
     .sidebar-title {
       font-size: 0.75rem;
-      color: #888;
+      color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.1em;
       margin-bottom: 8px;
-      border-bottom: 1px solid #2a2d3a;
+      border-bottom: 1px solid var(--border-color);
       padding-bottom: 4px;
     }
     .sidebar-links {
@@ -72,7 +128,7 @@
       margin-bottom: 8px;
     }
     .sidebar-links a {
-      color: #7bdcff;
+      color: var(--accent);
       text-decoration: none;
       font-size: 0.85rem;
     }
@@ -84,8 +140,9 @@
     main {
       flex: 1;
       padding: 32px;
-      background: #0b0c10;
+      background: var(--bg-body);
       overflow-x: hidden;
+      transition: background 0.2s;
     }
 
     /* Wikipedia風のメインタイトルとアンダーライン */
@@ -93,15 +150,15 @@
       font-size: 2.2rem;
       font-weight: normal;
       margin: 0 0 4px 0;
-      color: #fff;
+      color: var(--text-title);
     }
     .wiki-subtitle {
       font-size: 0.8rem;
-      color: #888;
+      color: var(--text-muted);
       margin-bottom: 16px;
     }
     .wiki-line {
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid var(--border-line);
       margin-bottom: 24px;
     }
 
@@ -111,7 +168,7 @@
       max-height: 250px;
       overflow: hidden;
       border-radius: 6px;
-      border: 1px solid #2a2d3a;
+      border: 1px solid var(--border-color);
       margin-bottom: 24px;
     }
     .top-image-container img {
@@ -127,7 +184,7 @@
       margin-bottom: 32px;
     }
     .wiki-lead b {
-      color: #7bdcff;
+      color: var(--accent);
       font-size: 1.1rem;
     }
 
@@ -135,10 +192,10 @@
     .wiki-h2 {
       font-size: 1.4rem;
       font-weight: normal;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid var(--border-line);
       padding-bottom: 4px;
       margin: 32px 0 16px 0;
-      color: #fff;
+      color: var(--text-title);
     }
 
     /* メンバー一覧を並べるグリッド */
@@ -153,8 +210,8 @@
       display: block;
     }
     .member-card {
-      background: #14161f;
-      border: 1px solid #2a2d3a;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       padding: 12px 16px;
       display: flex;
@@ -163,17 +220,17 @@
       transition: background 0.2s, border-color 0.2s;
     }
     .member-link:hover .member-card {
-      border-color: #7bdcff;
-      background: #1a1d29;
+      border-color: var(--accent);
+      background: var(--bg-card-hover);
     }
     .member-dot {
-      color: #7bdcff;
+      color: var(--accent);
       font-size: 0.8rem;
     }
     .member-name {
       font-size: 1rem;
       font-weight: bold;
-      color: #7bdcff;
+      color: var(--accent);
     }
     .member-link:hover .member-name {
       text-decoration: underline;
@@ -182,16 +239,17 @@
     footer {
       padding: 24px;
       font-size: 0.75rem;
-      color: #666;
-      border-top: 1px solid #2a2d3a;
+      color: var(--text-footer);
+      border-top: 1px solid var(--border-color);
       text-align: center;
-      background: #14161f;
+      background: var(--bg-header);
+      transition: background 0.2s, border-color 0.2s;
     }
 
     /* スマホ対応：画面が狭いときはメニューを上に配置 */
     @media (max-width: 768px) {
       .wiki-container { flex-direction: column; }
-      .wiki-sidebar { width: auto; border-right: none; border-bottom: 1px solid #2a2d3a; padding: 16px; }
+      .wiki-sidebar { width: auto; border-right: none; border-bottom: 1px solid var(--border-color); padding: 16px; }
     }
   </style>
 </head>
@@ -203,6 +261,12 @@
       <img src="images/ROGO.png" alt="ひきがたりうたわくWIKI" style="height: 40px; width: auto; display: block;">
       <span>| インターネット百科事典</span>
     </div>
+
+    <!-- テーマ切り替えボタン -->
+    <button class="theme-toggle" id="themeToggleBtn" type="button" aria-label="テーマ切り替え">
+      <span class="icon" id="themeIcon">🌙</span>
+      <span id="themeLabel">ダーク</span>
+    </button>
   </header>
 
   <div class="wiki-container">
@@ -233,7 +297,7 @@
       <div class="wiki-line"></div>
 
        <!-- トップ画像 -->
-      <div class="top-image-container" style="display: flex; justify-content: center; align-items: center; background: #14161f; padding: 40px 0;">
+      <div class="top-image-container" style="display: flex; justify-content: center; align-items: center; background: var(--bg-card); padding: 40px 0;">
         <img src="images/ROGO.png" alt="ひきがたりうたわくWIKI" style="max-height: 150px; width: auto; object-fit: contain;">
       </div>
 
@@ -267,6 +331,36 @@
   <footer>
     テキストはクリエイティブ・コモンズ 表示・継承ライセンスの下で利用可能です。
   </footer>
+
+  <script>
+    (function () {
+      var body = document.body;
+      var btn = document.getElementById('themeToggleBtn');
+      var icon = document.getElementById('themeIcon');
+      var label = document.getElementById('themeLabel');
+
+      function applyTheme(isLight) {
+        body.classList.toggle('light-theme', isLight);
+        icon.textContent = isLight ? '☀️' : '🌙';
+        label.textContent = isLight ? 'ライト' : 'ダーク';
+      }
+
+      // 前回選択したテーマを復元（保存に失敗しても問題なくダークで動作）
+      var saved = null;
+      try {
+        saved = localStorage.getItem('wikiTheme');
+      } catch (e) { /* localStorageが使えない環境でも無視 */ }
+      applyTheme(saved === 'light');
+
+      btn.addEventListener('click', function () {
+        var willBeLight = !body.classList.contains('light-theme');
+        applyTheme(willBeLight);
+        try {
+          localStorage.setItem('wikiTheme', willBeLight ? 'light' : 'dark');
+        } catch (e) { /* 保存できなくても動作は継続 */ }
+      });
+    })();
+  </script>
 
 </body>
 </html>
