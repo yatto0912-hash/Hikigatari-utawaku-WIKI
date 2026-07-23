@@ -267,22 +267,20 @@
       content: "— ";
     }
 
-    
-body.neon-theme{
-  --bg-page:#000;--bg-header:#000;--header-text:#fff;--bg-content:#050505;
-  --bg-res:#111;--border-color:#fff;--border-strong:#fff;
-  --text-main:#fff;--text-muted:#fff;--name-color:#fff;
-  --link-color:#fff;--accent:#ff00ff;
-  animation:neonFlash .08s linear infinite;
-}
-@keyframes neonFlash{
-0%{filter:hue-rotate(0deg) saturate(500%) brightness(220%)}
-25%{filter:hue-rotate(90deg) saturate(500%) brightness(220%)}
-50%{filter:hue-rotate(180deg) saturate(500%) brightness(220%)}
-75%{filter:hue-rotate(270deg) saturate(500%) brightness(220%)}
-100%{filter:hue-rotate(360deg) saturate(500%) brightness(220%)}
-}
-
+    body.neon-theme{
+      --bg-page:#000;--bg-header:#000;--header-text:#fff;--bg-content:#050505;
+      --bg-res:#111;--border-color:#fff;--border-strong:#fff;
+      --text-main:#fff;--text-muted:#fff;--name-color:#fff;
+      --link-color:#fff;--accent:#ff00ff;
+      animation:neonFlash .08s linear infinite;
+    }
+    @keyframes neonFlash{
+      0%{filter:hue-rotate(0deg) saturate(500%) brightness(220%)}
+      25%{filter:hue-rotate(90deg) saturate(500%) brightness(220%)}
+      50%{filter:hue-rotate(180deg) saturate(500%) brightness(220%)}
+      75%{filter:hue-rotate(270deg) saturate(500%) brightness(220%)}
+      100%{filter:hue-rotate(360deg) saturate(500%) brightness(220%)}
+    }
 
     @media (max-width: 768px) {
       .wiki-container { flex-direction: column; }
@@ -369,8 +367,12 @@ body.neon-theme{
           <div class="quote-author">ぽこチワワ</div>
         </div>
       </div>
-      <!-- 名言集までスクロールしたらEscort.mp3を再生 -->
-      <audio id="escortAudio" src="audio/Escort.mp3" preload="none"></audio>
+
+      <!-- エスコートボタン -->
+      <div class="hagure-audio-box">
+        <button id="escortBtn" class="hagure-button" type="button">🎵 エスコート</button>
+        <audio id="escortAudio" src="audio/Escort.mp3" preload="none"></audio>
+      </div>
     </main>
   </div>
 
@@ -385,21 +387,33 @@ body.neon-theme{
       var icon = document.getElementById('themeIcon');
       var label = document.getElementById('themeLabel');
 
-      function applyTheme(theme){
-body.classList.remove('dark-theme','neon-theme');
-if(theme==='dark'){body.classList.add('dark-theme');icon.textContent='🌙';label.textContent='ダーク';}
-else if(theme==='neon'){body.classList.add('neon-theme');icon.textContent='🌈';label.textContent='ドパガキ';}
-else{icon.textContent='☀️';label.textContent='ライト';}
-}
-var saved=localStorage.getItem('wikiTheme')||'light';
-applyTheme(saved);
+      function applyTheme(theme) {
+        body.classList.remove('dark-theme', 'neon-theme');
+        if (theme === 'dark') {
+          body.classList.add('dark-theme');
+          icon.textContent = '🌙';
+          label.textContent = 'ダーク';
+        } else if (theme === 'neon') {
+          body.classList.add('neon-theme');
+          icon.textContent = '🌈';
+          label.textContent = 'ドパガキ';
+        } else {
+          icon.textContent = '☀️';
+          label.textContent = 'ライト';
+        }
+      }
 
-      btn.addEventListener('click',function(){
-var current=localStorage.getItem('wikiTheme')||'light';
-var next=current==='light'?'dark':current==='dark'?'neon':'light';
-applyTheme(next);
-try{localStorage.setItem('wikiTheme',next);}catch(e){}
-});
+      var saved = localStorage.getItem('wikiTheme') || 'light';
+      applyTheme(saved);
+
+      btn.addEventListener('click', function () {
+        var current = localStorage.getItem('wikiTheme') || 'light';
+        var next = current === 'light' ? 'dark' : current === 'dark' ? 'neon' : 'light';
+        applyTheme(next);
+        try {
+          localStorage.setItem('wikiTheme', next);
+        } catch (e) {}
+      });
 
       /* はぐれメタルの遺言ボタン：クリックでMP3を再生 */
       var hagureBtn = document.getElementById('hagureBtn');
@@ -411,22 +425,14 @@ try{localStorage.setItem('wikiTheme',next);}catch(e){}
         });
       }
 
-      /* 名言集セクションが画面に入ったらEscort.mp3を1回だけ再生 */
+      /* エスコートボタン：クリックでMP3を再生 */
+      var escortBtn = document.getElementById('escortBtn');
       var escortAudio = document.getElementById('escortAudio');
-      var quoteSection = document.querySelector('.quote-list');
-      if (escortAudio && quoteSection && 'IntersectionObserver' in window) {
-        var escortPlayed = false;
-        var escortObserver = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.isIntersecting && !escortPlayed) {
-              escortPlayed = true;
-              escortAudio.currentTime = 0;
-              escortAudio.play();
-              escortObserver.disconnect();
-            }
-          });
-        }, { threshold: 0.3 });
-        escortObserver.observe(quoteSection);
+      if (escortBtn && escortAudio) {
+        escortBtn.addEventListener('click', function () {
+          escortAudio.currentTime = 0;
+          escortAudio.play();
+        });
       }
     })();
   </script>
