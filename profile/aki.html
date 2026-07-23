@@ -16,8 +16,6 @@
             --text-main: #000000;
             --text-muted: #555555;
             --name-color: #008000;
-            --date-color: #555555;
-            --res-num-bg: #cfcfcf;
             --link-color: #0000ee;
             --accent: #cc0000;
         }
@@ -32,8 +30,6 @@
             --text-main: #cfe8cf;
             --text-muted: #7fa87f;
             --name-color: #33ff66;
-            --date-color: #6fbf6f;
-            --res-num-bg: #1f2a1f;
             --link-color: #55aaff;
             --accent: #ff5555;
         }
@@ -87,25 +83,14 @@
             padding: 0;
             border: 1px solid var(--border-strong);
         }
-        .res-header {
+        .card-header {
             background: var(--bg-res);
             border-bottom: 1px solid var(--border-color);
             padding: 8px 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
-        .res-num {
-            background: var(--res-num-bg);
-            font-weight: bold;
-            font-size: 0.75rem;
-            padding: 2px 6px;
-            border-radius: 2px;
-        }
-        .res-name { color: var(--name-color); font-weight: bold; font-size: 1rem; }
-        .res-date { color: var(--date-color); font-size: 0.7rem; margin-left: auto; }
+        .member-name-title { color: var(--name-color); font-weight: bold; font-size: 1rem; }
 
-        .res-body { padding: 24px; text-align: center; }
+        .card-body { padding: 24px; text-align: center; }
         .avatar {
             width: 100px;
             height: 100px;
@@ -148,10 +133,10 @@
 <body>
 
     <div class="board-header">
-        <div class="board-title">■ ひきがたり・うたわくWIKI掲示板 ■</div>
+        <div class="board-title">■ ひきがたり・うたわくWIKI ■</div>
     </div>
     <div class="nav-bar">
-        <div>[ <a href="../index.html" style="color:var(--link-color);">スレッド一覧</a> ]</div>
+        <div>[ <a href="../index.html" style="color:var(--link-color);">ホームページ</a> ]</div>
         <button class="theme-toggle" id="themeToggleBtn" type="button" aria-label="テーマ切り替え">
             <span class="icon" id="themeIcon">☀️</span>
             <span id="themeLabel">ライト</span>
@@ -159,15 +144,13 @@
     </div>
 
     <div class="profile-container">
-        <div class="res-header">
-            <span class="res-num">1</span>
-            名前：<span class="res-name">あき</span>
-            <span class="res-date">投稿日：2026/07/23(木)</span>
+        <div class="card-header">
+            名前：<span class="member-name-title">あき</span>
         </div>
-        <div class="res-body">
+        <div class="card-body">
             <!-- 顔写真の代わりに、仮の丸アイコンを表示（後で画像に変更可能） -->
             <div class="avatar">👤</div>
-            <div class="role">◆チームメンバー</div>
+            <div class="role">チームメンバー</div>
 
             <div class="introduction">
                 <p>あき
@@ -176,7 +159,7 @@
             </div>
 
             <!-- 一覧ページに戻るためのリンク（「../」で1つ上のフォルダに戻るという意味になります） -->
-            <a href="../index.html" class="back-button">← スレッド一覧に戻る</a>
+            <a href="../index.html" class="back-button">← メンバー一覧に戻る</a>
         </div>
     </div>
 
