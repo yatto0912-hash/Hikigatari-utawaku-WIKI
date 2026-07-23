@@ -5,278 +5,256 @@
   <title>弾き語り・歌枠 WIKI - Wikipedia風</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    /* ===== テーマ用カラー変数（ダークがデフォルト） ===== */
+    /* ===== 2ch風カラー変数（クラシック掲示板がデフォルト） ===== */
     :root {
-      --bg-body: #0b0c10;
-      --bg-header: #14161f;
-      --bg-sidebar: #0b0c10;
-      --bg-card: #14161f;
-      --bg-card-hover: #1a1d29;
-      --border-color: #2a2d3a;
-      --border-line: #333;
-      --text-main: #f8f8f8;
-      --text-title: #fff;
-      --text-muted: #888;
-      --text-footer: #666;
-      --accent: #7bdcff;
+      --bg-page: #efefef;
+      --bg-header: #006600;
+      --header-text: #ffffff;
+      --bg-content: #eeeeee;
+      --bg-res: #f5f5f5;
+      --bg-res-alt: #e9f7e9;
+      --border-color: #999999;
+      --border-strong: #333333;
+      --text-main: #000000;
+      --text-muted: #555555;
+      --name-color: #008000;
+      --date-color: #555555;
+      --res-num-bg: #cfcfcf;
+      --link-color: #0000ee;
+      --link-visited: #551a8b;
+      --accent: #cc0000;
     }
 
-    /* ===== ライトテーマ ===== */
-    body.light-theme {
-      --bg-body: #ffffff;
-      --bg-header: #f5f5f7;
-      --bg-sidebar: #ffffff;
-      --bg-card: #f5f5f7;
-      --bg-card-hover: #eaeaea;
-      --border-color: #dcdcdc;
-      --border-line: #ddd;
-      --text-main: #1a1a1a;
-      --text-title: #111;
-      --text-muted: #666;
-      --text-footer: #888;
-      --accent: #0077b6;
+    /* ===== ダークモード（夜の掲示板風・端末テイスト） ===== */
+    body.dark-theme {
+      --bg-page: #0d0f0d;
+      --bg-header: #001a00;
+      --header-text: #00ff66;
+      --bg-content: #111511;
+      --bg-res: #131813;
+      --bg-res-alt: #182018;
+      --border-color: #2f3f2f;
+      --border-strong: #3f5f3f;
+      --text-main: #cfe8cf;
+      --text-muted: #7fa87f;
+      --name-color: #33ff66;
+      --date-color: #6fbf6f;
+      --res-num-bg: #1f2a1f;
+      --link-color: #55aaff;
+      --link-visited: #b388ff;
+      --accent: #ff5555;
     }
 
-    /* 全体のスタイル設定 */
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, sans-serif;
-      background: var(--bg-body);
+      font-family: "MS PGothic", "ＭＳ Ｐゴシック", "Hiragino Kaku Gothic ProN", monospace, sans-serif;
+      font-size: 13px;
+      background: var(--bg-page);
       color: var(--text-main);
       display: flex;
       flex-direction: column;
       min-height: 100vh;
       transition: background 0.2s, color 0.2s;
     }
-    header {
-      padding: 12px 24px;
+
+    /* ===== 掲示板ヘッダー ===== */
+    .board-header {
       background: var(--bg-header);
-      border-bottom: 1px solid var(--border-line);
+      color: var(--header-text);
+      padding: 10px 16px 6px;
+      text-align: center;
+      border-bottom: 3px solid var(--border-strong);
+    }
+    .board-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+    .board-title img {
+      height: 32px;
+      width: auto;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    .board-sub {
+      font-size: 0.75rem;
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+
+    /* ===== ナビゲーションバー ===== */
+    .nav-bar {
+      background: var(--bg-content);
+      border-bottom: 1px solid var(--border-color);
+      padding: 6px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: background 0.2s, border-color 0.2s;
+      flex-wrap: wrap;
+      gap: 8px;
     }
-    .logo {
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      color: var(--accent);
-      font-size: 1.2rem;
-    }
-    .logo span {
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      font-weight: normal;
-    }
+    .nav-links { font-size: 0.8rem; }
+    .nav-links a { color: var(--link-color); text-decoration: underline; }
+    .nav-links .sep { color: var(--text-muted); margin: 0 4px; }
 
-    /* テーマ切り替えボタン */
     .theme-toggle {
       display: flex;
       align-items: center;
-      gap: 8px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 6px 14px;
+      gap: 6px;
+      background: var(--bg-res);
+      border: 1px solid var(--border-strong);
+      border-radius: 2px;
+      padding: 4px 10px;
       cursor: pointer;
       color: var(--text-main);
-      font-size: 0.85rem;
-      transition: background 0.2s, border-color 0.2s;
+      font-size: 0.8rem;
+      font-family: inherit;
     }
-    .theme-toggle:hover {
-      border-color: var(--accent);
-    }
-    .theme-toggle .icon {
-      font-size: 1rem;
-    }
+    .theme-toggle:hover { border-color: var(--accent); }
 
-    /* Wikipedia特有の2カラム（左右分割）レイアウト */
     .wiki-container {
       display: flex;
       flex: 1;
-      max-width: 1400px;
+      max-width: 1200px;
       width: 100%;
       margin: 0 auto;
     }
 
-    /* 左側のナビゲーションメニュー（Wikiのサイドバー風） */
     .wiki-sidebar {
-      width: 200px;
-      padding: 24px;
+      width: 170px;
+      padding: 16px;
       border-right: 1px solid var(--border-color);
-      background: var(--bg-sidebar);
-      transition: background 0.2s, border-color 0.2s;
+      background: var(--bg-content);
     }
-    .sidebar-section {
-      margin-bottom: 24px;
-    }
+    .sidebar-section { margin-bottom: 20px; }
     .sidebar-title {
       font-size: 0.75rem;
       color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 8px;
+      font-weight: bold;
+      margin-bottom: 6px;
       border-bottom: 1px solid var(--border-color);
-      padding-bottom: 4px;
+      padding-bottom: 3px;
     }
-    .sidebar-links {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .sidebar-links li {
-      margin-bottom: 8px;
-    }
-    .sidebar-links a {
-      color: var(--accent);
-      text-decoration: none;
-      font-size: 0.85rem;
-    }
-    .sidebar-links a:hover {
-      text-decoration: underline;
-    }
+    .sidebar-links { list-style: none; padding: 0; margin: 0; }
+    .sidebar-links li { margin-bottom: 6px; }
+    .sidebar-links a { color: var(--link-color); text-decoration: underline; font-size: 0.8rem; }
 
-    /* 右側のメインコンテンツ領域 */
     main {
       flex: 1;
-      padding: 32px;
-      background: var(--bg-body);
-      overflow-x: hidden;
-      transition: background 0.2s;
+      padding: 16px 20px;
+      background: var(--bg-page);
     }
 
-    /* Wikipedia風のメインタイトルとアンダーライン */
-    .wiki-title {
-      font-size: 2.2rem;
-      font-weight: normal;
-      margin: 0 0 4px 0;
-      color: var(--text-title);
+    .thread-title {
+      background: var(--bg-content);
+      border: 1px solid var(--border-strong);
+      padding: 8px 12px;
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 4px;
     }
-    .wiki-subtitle {
-      font-size: 0.8rem;
+    .thread-sub {
+      font-size: 0.7rem;
       color: var(--text-muted);
       margin-bottom: 16px;
     }
-    .wiki-line {
-      border-bottom: 1px solid var(--border-line);
-      margin-bottom: 24px;
-    }
 
-    /* メインビジュアル（トップ画像エリア） */
     .top-image-container {
       width: 100%;
-      max-height: 250px;
+      max-height: 220px;
       overflow: hidden;
-      border-radius: 6px;
       border: 1px solid var(--border-color);
-      margin-bottom: 24px;
+      margin-bottom: 16px;
+      background: var(--bg-res);
     }
-    .top-image-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .top-image-container img { width: 100%; height: 100%; object-fit: contain; }
 
-    /* 記事の概要文セクション */
     .wiki-lead {
-      font-size: 1rem;
-      line-height: 1.7;
-      margin-bottom: 32px;
-    }
-    .wiki-lead b {
-      color: var(--accent);
-      font-size: 1.1rem;
-    }
-
-    /* Wikipedia風の見出し2 */
-    .wiki-h2 {
-      font-size: 1.4rem;
-      font-weight: normal;
-      border-bottom: 1px solid var(--border-line);
-      padding-bottom: 4px;
-      margin: 32px 0 16px 0;
-      color: var(--text-title);
-    }
-
-    /* メンバー一覧を並べるグリッド */
-    .member-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
-    }
-    .member-link {
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    .member-card {
-      background: var(--bg-card);
+      line-height: 1.8;
+      margin-bottom: 20px;
+      background: var(--bg-res);
       border: 1px solid var(--border-color);
-      border-radius: 4px;
-      padding: 12px 16px;
+      padding: 12px 14px;
+    }
+    .wiki-lead b { color: var(--accent); }
+
+    .section-title {
+      font-weight: bold;
+      font-size: 0.95rem;
+      border-bottom: 2px solid var(--border-strong);
+      padding-bottom: 3px;
+      margin: 20px 0 10px 0;
+    }
+
+    .res-list { border: 1px solid var(--border-color); }
+    .res-block {
       display: flex;
       align-items: center;
-      gap: 8px;
-      transition: background 0.2s, border-color 0.2s;
+      gap: 10px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--bg-res);
+      text-decoration: none;
+      color: inherit;
     }
-    .member-link:hover .member-card {
-      border-color: var(--accent);
-      background: var(--bg-card-hover);
-    }
-    .member-dot {
-      color: var(--accent);
-      font-size: 0.8rem;
-    }
-    .member-name {
-      font-size: 1rem;
+    .res-block:nth-child(even) { background: var(--bg-res-alt); }
+    .res-block:hover { outline: 1px dashed var(--accent); }
+    .res-num {
+      background: var(--res-num-bg);
+      color: var(--text-main);
       font-weight: bold;
-      color: var(--accent);
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 2px;
+      min-width: 22px;
+      text-align: center;
+      flex-shrink: 0;
     }
-    .member-link:hover .member-name {
-      text-decoration: underline;
-    }
+    .res-meta { display: flex; flex-direction: column; }
+    .res-name { color: var(--name-color); font-weight: bold; font-size: 0.95rem; }
+    .res-date { color: var(--date-color); font-size: 0.7rem; }
+    .res-arrow { margin-left: auto; color: var(--link-color); font-size: 0.8rem; flex-shrink: 0; }
 
     footer {
-      padding: 24px;
-      font-size: 0.75rem;
-      color: var(--text-footer);
+      padding: 14px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
       border-top: 1px solid var(--border-color);
       text-align: center;
-      background: var(--bg-header);
-      transition: background 0.2s, border-color 0.2s;
+      background: var(--bg-content);
     }
 
-    /* スマホ対応：画面が狭いときはメニューを上に配置 */
     @media (max-width: 768px) {
       .wiki-container { flex-direction: column; }
-      .wiki-sidebar { width: auto; border-right: none; border-bottom: 1px solid var(--border-color); padding: 16px; }
+      .wiki-sidebar { width: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <!-- ★自作ロゴ画像(ROGO.png)を読み込む設定に更新しました -->
-    <div class="logo" style="display: flex; align-items: center; gap: 12px;">
-      <img src="images/ROGO.png" alt="ひきがたりうたわくWIKI" style="height: 40px; width: auto; display: block;">
-      <span>| インターネット百科事典</span>
-    </div>
+  <div class="board-header">
+    <div class="board-title"><img src="images/ROGO.png" alt="ロゴ">■ ひきがたり・うたわくWIKI掲示板 ■</div>
+    <div class="board-sub">かきこみ自由・age推奨・sage進行禁止</div>
+  </div>
 
-    <!-- テーマ切り替えボタン -->
+  <div class="nav-bar">
+    <div class="nav-links">
+      [ <a href="#">掲示板トップ</a><span class="sep">|</span><a href="https://line.me" target="_blank">公式オープンチャット</a><span class="sep">|</span><a href="#">最近の更新</a><span class="sep">|</span><a href="#">過去ログ</a> ]
+    </div>
     <button class="theme-toggle" id="themeToggleBtn" type="button" aria-label="テーマ切り替え">
-      <span class="icon" id="themeIcon">🌙</span>
-      <span id="themeLabel">ダーク</span>
+      <span class="icon" id="themeIcon">☀️</span>
+      <span id="themeLabel">ライト</span>
     </button>
-  </header>
+  </div>
 
   <div class="wiki-container">
-    <!-- 左サイドバー（Wikipedia風メニュー） -->
     <aside class="wiki-sidebar">
       <div class="sidebar-section">
         <div class="sidebar-title">案内</div>
         <ul class="sidebar-links">
           <li><a href="#">メインページ</a></li>
-          <!-- ★設定したLINEオープンチャットのURL -->
           <li><a href="https://line.me" target="_blank">公式オープンチャット</a></li>
           <li><a href="#">最近の更新</a></li>
         </ul>
@@ -290,40 +268,96 @@
       </div>
     </aside>
 
-    <!-- メインコンテンツ -->
     <main>
-      <h1 class="wiki-title">弾き語り・歌枠チーム</h1>
-      <div class="wiki-subtitle">出典: フリー百科事典『ウィキペディア（Wikipedia）』風</div>
-      <div class="wiki-line"></div>
+      <div class="thread-title">【まとめ】弾き語り・歌枠チームメンバー一覧【15人】</div>
+      <div class="thread-sub">出典: フリー百科事典『ウィキペディア（Wikipedia）』風 ／ レス数 15</div>
 
-       <!-- トップ画像 -->
-      <div class="top-image-container" style="display: flex; justify-content: center; align-items: center; background: var(--bg-card); padding: 40px 0;">
-        <img src="images/ROGO.png" alt="ひきがたりうたわくWIKI" style="max-height: 150px; width: auto; object-fit: contain;">
+      <div class="top-image-container">
+        <img src="images/ROGO.png" alt="ひきがたりうたわくWIKI">
       </div>
-
 
       <p class="wiki-lead">
         <b>弾き語り・歌枠チーム</b>とは、音楽活動や配信を中心に行うクリエイターグループである。
         本稿では、所属する主要メンバー15名の一覧およびそれぞれの詳細情報について記述する。
       </p>
 
-      <h2 class="wiki-h2">所属メンバー</h2>
-      <div class="member-grid">
-        <a href="profile/aki.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">あき</div></div></a>
-        <a href="profile/hagure.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">はぐれメタル</div></div></a>
-        <a href="profile/onkyo.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">音響</div></div></a>
-        <a href="profile/hikigatari.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">弾き語り</div></div></a>
-        <a href="profile/sinister.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">シニスター</div></div></a>
-        <a href="profile/ankoro.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">あんころ</div></div></a>
-        <a href="profile/tanmen.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">たんめん</div></div></a>
-        <a href="profile/toki.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">とき</div></div></a>
-        <a href="profile/pokochiva.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ぽこチワワ</div></div></a>
-        <a href="profile/potatofly.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ぽたとふらい</div></div></a>
-        <a href="profile/mikun.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">みーくん</div></div></a>
-        <a href="profile/yu.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ゆー</div></div></a>
-        <a href="profile/walworld.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ワールワールド</div></div></a>
-        <a href="profile/hokori.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ホコリ</div></div></a>
-        <a href="profile/chibikava.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ちびかわ</div></div></a>
+      <div class="section-title">所属メンバー一覧（レス一覧）</div>
+      <div class="res-list">
+        <a href="profile/aki.html" class="res-block">
+          <span class="res-num">1</span>
+          <span class="res-meta"><span class="res-name">あき</span><span class="res-date">2026/07/23(木)</span></span>
+          <span class="res-arrow">詳細を見る →</span>
+        </a>
+        <a href="profile/hagure.html" class="res-block">
+          <span class="res-num">2</span>
+          <span class="res-meta"><span class="res-name">はぐれメタル</span><span class="res-date">2026/07/23(木)</span></span>
+          <span class="res-arrow">詳細を見る →</span>
+        </a>
+        <a href="profile/onkyo.html" class="res-block">
+          <span class="res-num">3</span>
+          <span class="res-meta"><span class="res-name">音響</span><span class="res-date">2026/07/23(木)</span></span>
+          <span class="res-arrow">詳細を見る →</span>
+        </a>
+        <a href="profile/hikigatari.html" class="res-block">
+          <span class="res-num">4</span>
+          <span class="res-meta"><span class="res-name">弾き語り</span><span class="res-date">2026/07/23(木)</span></span>
+          <span class="res-arrow">詳細を見る →</span>
+        </a>
+        <a href="profile/sinister.html" class="res-block">
+          <span class="res-num">5</span>
+          <span class="res-meta"><span class="res-name">シニスター</span><span class="res-date">2026/07/23(木)</span></span>
+          <span class="res-arrow">詳細を見る →</span>
+        </a>
+        <a href="profile/ankoro.html" class="res-block">
+          <span class="res-num">6</span>
+          <span class="res-meta"><span class="res-name">あんころ</span><span class="res-date">2026/07/23(木)</span></span>
+          <span class="res-arrow">詳細を見る →</span>
+        </a>
+        <a href="profile/tanmen.html" class="res-block">
+          <span class="res-num">7</span>
+          <span class="res-meta"><span class="res-name">たんめん</span><span class="res-date">2026/07/23(木)</span></span>
+          <span class="res-arrow">詳細を見る →</span>
+        </a>
+        <a href="profile/toki.html" class="res-block">
+          <span class="res-num">8</span>
+          <span class="res-meta"><span class="res-name">とき</span><span class="res-date">2026/07/23(木)</span></span>
+          <span class="res-arrow">詳細を見る →</span>
+        </a>
+        <a href="profile/pokochiva.html" class="res-block">
+          <span class="res-num">9</span>
+          <span class="res-meta"><span class="res-name">ぽこチワワ</span><span class="res-date">2026/07/23(木)</span></span>
+          <span class="res-arrow">詳細を見る →</span>
+        </a>
+        <a href="profile/potatofly.html" class="res-block">
+          <span class="res-num">10</span>
+          <span class="res-meta"><span class="res-name">ぽたとふらい</span><span class="res-date">2026/07/23(木)</span></span>
+          <span class="res-arrow">詳細を見る →</span>
+        </a>
+        <a href="profile/mikun.html" class="res-block">
+          <span class="res-num">11</span>
+          <span class="res-meta"><span class="res-name">みーくん</span><span class="res-date">2026/07/23(木)</span></span>
+          <span class="res-arrow">詳細を見る →</span>
+        </a>
+        <a href="profile/yu.html" class="res-block">
+          <span class="res-num">12</span>
+          <span class="res-meta"><span class="res-name">ゆー</span><span class="res-date">2026/07/23(木)</span></span>
+          <span class="res-arrow">詳細を見る →</span>
+        </a>
+        <a href="profile/walworld.html" class="res-block">
+          <span class="res-num">13</span>
+          <span class="res-meta"><span class="res-name">ワールワールド</span><span class="res-date">2026/07/23(木)</span></span>
+          <span class="res-arrow">詳細を見る →</span>
+        </a>
+        <a href="profile/hokori.html" class="res-block">
+          <span class="res-num">14</span>
+          <span class="res-meta"><span class="res-name">ホコリ</span><span class="res-date">2026/07/23(木)</span></span>
+          <span class="res-arrow">詳細を見る →</span>
+        </a>
+        <a href="profile/chibikava.html" class="res-block">
+          <span class="res-num">15</span>
+          <span class="res-meta"><span class="res-name">ちびかわ</span><span class="res-date">2026/07/23(木)</span></span>
+          <span class="res-arrow">詳細を見る →</span>
+        </a>
       </div>
     </main>
   </div>
@@ -339,24 +373,23 @@
       var icon = document.getElementById('themeIcon');
       var label = document.getElementById('themeLabel');
 
-      function applyTheme(isLight) {
-        body.classList.toggle('light-theme', isLight);
-        icon.textContent = isLight ? '☀️' : '🌙';
-        label.textContent = isLight ? 'ライト' : 'ダーク';
+      function applyTheme(isDark) {
+        body.classList.toggle('dark-theme', isDark);
+        icon.textContent = isDark ? '🌙' : '☀️';
+        label.textContent = isDark ? 'ダーク' : 'ライト';
       }
 
-      // 前回選択したテーマを復元（保存に失敗しても問題なくダークで動作）
       var saved = null;
       try {
         saved = localStorage.getItem('wikiTheme');
       } catch (e) { /* localStorageが使えない環境でも無視 */ }
-      applyTheme(saved === 'light');
+      applyTheme(saved === 'dark');
 
       btn.addEventListener('click', function () {
-        var willBeLight = !body.classList.contains('light-theme');
-        applyTheme(willBeLight);
+        var willBeDark = !body.classList.contains('dark-theme');
+        applyTheme(willBeDark);
         try {
-          localStorage.setItem('wikiTheme', willBeLight ? 'light' : 'dark');
+          localStorage.setItem('wikiTheme', willBeDark ? 'dark' : 'light');
         } catch (e) { /* 保存できなくても動作は継続 */ }
       });
     })();
