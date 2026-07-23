@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <title>弾き語り・歌枠 WIKI - Wikipedia風</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="弾き語り・歌枠チームの公式Wiki。15名のメンバー情報、名言集、音声コンテンツを掲載。">
+  <meta property="og:title" content="弾き語り・歌枠チーム WIKI">
+  <meta property="og:description" content="音楽活動や配信を中心に行うクリエイターグループの情報サイト">
+  <meta property="og:type" content="website">
   <style>
     /* ===== 2ch風カラー変数（クラシック掲示板がデフォルト） ===== */
     :root {
@@ -37,6 +41,31 @@
       --accent: #ff5555;
     }
 
+    /* ===== ネオンモード（ドパガキ） ===== */
+    body.neon-theme {
+      --bg-page: #000;
+      --bg-header: #000;
+      --header-text: #fff;
+      --bg-content: #050505;
+      --bg-res: #111;
+      --border-color: #fff;
+      --border-strong: #fff;
+      --text-main: #fff;
+      --text-muted: #fff;
+      --name-color: #fff;
+      --link-color: #fff;
+      --accent: #ff00ff;
+      animation: neonFlash 0.08s linear infinite;
+    }
+
+    @keyframes neonFlash {
+      0% { filter: hue-rotate(0deg) saturate(500%) brightness(220%); }
+      25% { filter: hue-rotate(90deg) saturate(500%) brightness(220%); }
+      50% { filter: hue-rotate(180deg) saturate(500%) brightness(220%); }
+      75% { filter: hue-rotate(270deg) saturate(500%) brightness(220%); }
+      100% { filter: hue-rotate(360deg) saturate(500%) brightness(220%); }
+    }
+
     * { box-sizing: border-box; }
 
     body {
@@ -59,11 +88,13 @@
       text-align: center;
       border-bottom: 3px solid var(--border-strong);
     }
+
     .board-title {
       font-size: 1.3rem;
       font-weight: bold;
       letter-spacing: 0.05em;
     }
+
     .board-title img {
       height: 32px;
       width: auto;
@@ -82,9 +113,20 @@
       flex-wrap: wrap;
       gap: 8px;
     }
-    .nav-links { font-size: 0.8rem; }
-    .nav-links a { color: var(--link-color); text-decoration: underline; }
-    .nav-links .sep { color: var(--text-muted); margin: 0 4px; }
+
+    .nav-links {
+      font-size: 0.8rem;
+    }
+
+    .nav-links a {
+      color: var(--link-color);
+      text-decoration: underline;
+    }
+
+    .nav-links .sep {
+      color: var(--text-muted);
+      margin: 0 4px;
+    }
 
     .theme-toggle {
       display: flex;
@@ -98,8 +140,12 @@
       color: var(--text-main);
       font-size: 0.8rem;
       font-family: inherit;
+      transition: border-color 0.15s;
     }
-    .theme-toggle:hover { border-color: var(--accent); }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+    }
 
     /* ===== メインレイアウト（2カラム） ===== */
     .wiki-container {
@@ -116,6 +162,7 @@
       border-right: 1px solid var(--border-color);
       background: var(--bg-content);
     }
+
     .sidebar-title {
       font-size: 0.75rem;
       color: var(--text-muted);
@@ -124,9 +171,22 @@
       border-bottom: 1px solid var(--border-color);
       padding-bottom: 3px;
     }
-    .sidebar-links { list-style: none; padding: 0; margin: 0; }
-    .sidebar-links li { margin-bottom: 6px; }
-    .sidebar-links a { color: var(--link-color); text-decoration: underline; font-size: 0.8rem; }
+
+    .sidebar-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar-links li {
+      margin-bottom: 6px;
+    }
+
+    .sidebar-links a {
+      color: var(--link-color);
+      text-decoration: underline;
+      font-size: 0.8rem;
+    }
 
     main {
       flex: 1;
@@ -140,11 +200,13 @@
       margin: 0 0 4px 0;
       color: var(--text-main);
     }
+
     .wiki-subtitle {
       font-size: 0.75rem;
       color: var(--text-muted);
       margin-bottom: 12px;
     }
+
     .wiki-line {
       border-bottom: 2px solid var(--border-strong);
       margin-bottom: 20px;
@@ -160,6 +222,7 @@
       align-items: center;
       padding: 16px 8px;
     }
+
     .top-image-container img {
       display: block;
       width: auto;
@@ -176,13 +239,17 @@
       border: 1px solid var(--border-color);
       padding: 12px 14px;
     }
-    .wiki-lead b { color: var(--accent); }
+
+    .wiki-lead b {
+      color: var(--accent);
+    }
 
     /* ===== はぐれメタルの遺言ボタン ===== */
     .hagure-audio-box {
       text-align: center;
       margin-bottom: 20px;
     }
+
     .hagure-button {
       font-family: inherit;
       font-size: 0.95rem;
@@ -193,12 +260,14 @@
       color: var(--accent);
       border-radius: 2px;
       cursor: pointer;
-      transition: background 0.15s, color 0.15s;
+      transition: background 0.15s, color 0.15s, transform 0.1s;
     }
+
     .hagure-button:hover {
       background: var(--accent);
       color: var(--header-text);
     }
+
     .hagure-button:active {
       transform: scale(0.98);
     }
@@ -217,7 +286,13 @@
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 10px;
     }
-    .member-link { text-decoration: none; color: inherit; display: block; }
+
+    .member-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
     .member-card {
       background: var(--bg-res);
       border: 1px solid var(--border-color);
@@ -225,13 +300,27 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      transition: border-color 0.15s;
     }
+
     .member-link:hover .member-card {
       border-color: var(--accent);
     }
-    .member-dot { color: var(--name-color); font-size: 0.8rem; }
-    .member-name { font-size: 1rem; font-weight: bold; color: var(--name-color); }
-    .member-link:hover .member-name { text-decoration: underline; }
+
+    .member-dot {
+      color: var(--name-color);
+      font-size: 0.8rem;
+    }
+
+    .member-name {
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--name-color);
+    }
+
+    .member-link:hover .member-name {
+      text-decoration: underline;
+    }
 
     footer {
       padding: 14px;
@@ -248,43 +337,39 @@
       flex-direction: column;
       gap: 10px;
     }
+
     .quote-card {
       background: var(--bg-res);
       border: 1px solid var(--border-color);
       border-left: 4px solid var(--name-color);
       padding: 12px 16px;
     }
+
     .quote-text {
       margin: 0 0 6px 0;
       line-height: 1.6;
     }
+
     .quote-author {
       text-align: right;
       font-size: 0.8rem;
       color: var(--text-muted);
     }
+
     .quote-author::before {
       content: "— ";
     }
 
-    body.neon-theme{
-      --bg-page:#000;--bg-header:#000;--header-text:#fff;--bg-content:#050505;
-      --bg-res:#111;--border-color:#fff;--border-strong:#fff;
-      --text-main:#fff;--text-muted:#fff;--name-color:#fff;
-      --link-color:#fff;--accent:#ff00ff;
-      animation:neonFlash .08s linear infinite;
-    }
-    @keyframes neonFlash{
-      0%{filter:hue-rotate(0deg) saturate(500%) brightness(220%)}
-      25%{filter:hue-rotate(90deg) saturate(500%) brightness(220%)}
-      50%{filter:hue-rotate(180deg) saturate(500%) brightness(220%)}
-      75%{filter:hue-rotate(270deg) saturate(500%) brightness(220%)}
-      100%{filter:hue-rotate(360deg) saturate(500%) brightness(220%)}
-    }
-
     @media (max-width: 768px) {
-      .wiki-container { flex-direction: column; }
-      .wiki-sidebar { width: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
+      .wiki-container {
+        flex-direction: column;
+      }
+
+      .wiki-sidebar {
+        width: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+      }
     }
   </style>
 </head>
@@ -325,7 +410,7 @@
       <!-- はぐれメタルの遺言：ボタンを押すとMP3音声を再生 -->
       <div class="hagure-audio-box">
         <button id="hagureBtn" class="hagure-button" type="button">📜 はぐれメタルの遺言</button>
-        <audio id="hagureAudio" src="audio/HagureYuigon.mp3" preload="none"></audio>
+        <audio id="hagureAudio" preload="none"></audio>
       </div>
 
       <p class="wiki-lead">
@@ -349,8 +434,8 @@
         <a href="profile/yu.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ゆー</div></div></a>
         <a href="profile/walworld.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ワールワールド</div></div></a>
         <a href="profile/hokori.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ホコリ</div></div></a>
-        <a href="profile/chibikava.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ちびかわ</div></div></a>
-         <a href="profile/ko.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">Ko(自認ガリレオ)</div></div></a>
+        <a href="profile/chibikawa.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ちびかわ</div></div></a>
+        <a href="profile/ko.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">Ko(自認ガリレオ)</div></div></a>
       </div>
 
       <div class="section-title">みんなの名言集</div>
@@ -372,7 +457,7 @@
       <!-- エスコートボタン -->
       <div class="hagure-audio-box">
         <button id="escortBtn" class="hagure-button" type="button">🎵 エスコート</button>
-        <audio id="escortAudio" src="audio/Escort.mp3" preload="none"></audio>
+        <audio id="escortAudio" preload="none"></audio>
       </div>
     </main>
   </div>
@@ -383,13 +468,44 @@
 
   <script>
     (function () {
+      // DOM要素の取得
       var body = document.body;
       var btn = document.getElementById('themeToggleBtn');
       var icon = document.getElementById('themeIcon');
       var label = document.getElementById('themeLabel');
+      var hagureBtn = document.getElementById('hagureBtn');
+      var hagureAudio = document.getElementById('hagureAudio');
+      var escortBtn = document.getElementById('escortBtn');
+      var escortAudio = document.getElementById('escortAudio');
 
+      /**
+       * エスコート音声ファイルを更新
+       * @param {string} theme - テーマ名 ('light', 'dark', 'neon')
+       */
+      function updateEscortAudio(theme) {
+        if (escortAudio) {
+          escortAudio.src = theme === 'neon' 
+            ? 'audio/OtowareEscort.mp3' 
+            : 'audio/Escort.mp3';
+        }
+      }
+
+      /**
+       * はぐれメタルの遺言音声ファイルを設定
+       */
+      function setHagureAudio() {
+        if (hagureAudio) {
+          hagureAudio.src = 'audio/HagureYuigon.mp3';
+        }
+      }
+
+      /**
+       * テーマを適用
+       * @param {string} theme - テーマ名 ('light', 'dark', 'neon')
+       */
       function applyTheme(theme) {
         body.classList.remove('dark-theme', 'neon-theme');
+        
         if (theme === 'dark') {
           body.classList.add('dark-theme');
           icon.textContent = '🌙';
@@ -402,37 +518,44 @@
           icon.textContent = '☀️';
           label.textContent = 'ライト';
         }
+        
+        updateEscortAudio(theme);
       }
 
+      // 初期化：保存されたテーマを読み込み
       var saved = localStorage.getItem('wikiTheme') || 'light';
       applyTheme(saved);
+      setHagureAudio();
 
+      // テーマ切り替えボタンのイベント
       btn.addEventListener('click', function () {
         var current = localStorage.getItem('wikiTheme') || 'light';
         var next = current === 'light' ? 'dark' : current === 'dark' ? 'neon' : 'light';
         applyTheme(next);
         try {
           localStorage.setItem('wikiTheme', next);
-        } catch (e) {}
+        } catch (e) {
+          console.warn('localStorage保存に失敗:', e);
+        }
       });
 
-      /* はぐれメタルの遺言ボタン：クリックでMP3を再生 */
-      var hagureBtn = document.getElementById('hagureBtn');
-      var hagureAudio = document.getElementById('hagureAudio');
+      // はぐれメタルの遺言ボタン
       if (hagureBtn && hagureAudio) {
         hagureBtn.addEventListener('click', function () {
           hagureAudio.currentTime = 0;
-          hagureAudio.play();
+          hagureAudio.play().catch(function (error) {
+            console.error('音声再生エラー:', error);
+          });
         });
       }
 
-      /* エスコートボタン：クリックでMP3を再生 */
-      var escortBtn = document.getElementById('escortBtn');
-      var escortAudio = document.getElementById('escortAudio');
+      // エスコートボタン
       if (escortBtn && escortAudio) {
         escortBtn.addEventListener('click', function () {
           escortAudio.currentTime = 0;
-          escortAudio.play();
+          escortAudio.play().catch(function (error) {
+            console.error('音声再生エラー:', error);
+          });
         });
       }
     })();
