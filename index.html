@@ -178,6 +178,31 @@
     }
     .wiki-lead b { color: var(--accent); }
 
+    /* ===== はぐれメタルの遺言ボタン ===== */
+    .hagure-audio-box {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .hagure-button {
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: bold;
+      padding: 10px 22px;
+      background: var(--bg-res);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .hagure-button:hover {
+      background: var(--accent);
+      color: var(--header-text);
+    }
+    .hagure-button:active {
+      transform: scale(0.98);
+    }
+
     .section-title {
       font-weight: bold;
       font-size: 0.95rem;
@@ -257,6 +282,12 @@
         <img src="images/ROGO.png" alt="ひきがたりうたわくWIKI">
       </div>
 
+      <!-- はぐれメタルの遺言：ボタンを押すとMP3音声を再生 -->
+      <div class="hagure-audio-box">
+        <button id="hagureBtn" class="hagure-button" type="button">📜 はぐれメタルの遺言</button>
+        <audio id="hagureAudio" src="audio/HagureYuigon.mp3" preload="none"></audio>
+      </div>
+
       <p class="wiki-lead">
         <b>弾き語り・歌枠チーム</b>とは、音楽活動や配信を中心に行うクリエイターグループである。
         本稿では、所属する主要メンバー15名の一覧およびそれぞれの詳細情報について記述する。
@@ -313,6 +344,16 @@
           localStorage.setItem('wikiTheme', willBeDark ? 'dark' : 'light');
         } catch (e) { /* 保存できなくても動作は継続 */ }
       });
+
+      /* はぐれメタルの遺言ボタン：クリックでMP3を再生 */
+      var hagureBtn = document.getElementById('hagureBtn');
+      var hagureAudio = document.getElementById('hagureAudio');
+      if (hagureBtn && hagureAudio) {
+        hagureBtn.addEventListener('click', function () {
+          hagureAudio.currentTime = 0;
+          hagureAudio.play();
+        });
+      }
     })();
   </script>
 
