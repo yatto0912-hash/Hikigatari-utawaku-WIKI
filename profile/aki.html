@@ -102,6 +102,12 @@
             align-items: center;
             justify-content: center;
             font-size: 2rem;
+            overflow: hidden;
+        }
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .role {
             display: inline-block;
@@ -148,7 +154,7 @@
             名前：<span class="member-name-title">あき</span>
         </div>
         <div class="card-body">
-            <!-- 顔写真の代わりに、仮の丸アイコンを表示（後で画像に変更可能） -->
+            <!-- アイコン画像：images/aki.jpg を表示 -->
             <div class="avatar"><img src="../images/aki.jpg" alt="あき"></div>
             <div class="role">チームメンバー</div>
 
