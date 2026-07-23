@@ -267,6 +267,23 @@
       content: "— ";
     }
 
+    
+body.neon-theme{
+  --bg-page:#000;--bg-header:#000;--header-text:#fff;--bg-content:#050505;
+  --bg-res:#111;--border-color:#fff;--border-strong:#fff;
+  --text-main:#fff;--text-muted:#fff;--name-color:#fff;
+  --link-color:#fff;--accent:#ff00ff;
+  animation:neonFlash .08s linear infinite;
+}
+@keyframes neonFlash{
+0%{filter:hue-rotate(0deg) saturate(500%) brightness(220%)}
+25%{filter:hue-rotate(90deg) saturate(500%) brightness(220%)}
+50%{filter:hue-rotate(180deg) saturate(500%) brightness(220%)}
+75%{filter:hue-rotate(270deg) saturate(500%) brightness(220%)}
+100%{filter:hue-rotate(360deg) saturate(500%) brightness(220%)}
+}
+
+
     @media (max-width: 768px) {
       .wiki-container { flex-direction: column; }
       .wiki-sidebar { width: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
@@ -368,25 +385,21 @@
       var icon = document.getElementById('themeIcon');
       var label = document.getElementById('themeLabel');
 
-      function applyTheme(isDark) {
-        body.classList.toggle('dark-theme', isDark);
-        icon.textContent = isDark ? '🌙' : '☀️';
-        label.textContent = isDark ? 'ダーク' : 'ライト';
-      }
+      function applyTheme(theme){
+body.classList.remove('dark-theme','neon-theme');
+if(theme==='dark'){body.classList.add('dark-theme');icon.textContent='🌙';label.textContent='ダーク';}
+else if(theme==='neon'){body.classList.add('neon-theme');icon.textContent='🌈';label.textContent='ドパガキ';}
+else{icon.textContent='☀️';label.textContent='ライト';}
+}
+var saved=localStorage.getItem('wikiTheme')||'light';
+applyTheme(saved);
 
-      var saved = null;
-      try {
-        saved = localStorage.getItem('wikiTheme');
-      } catch (e) { /* localStorageが使えない環境でも無視 */ }
-      applyTheme(saved === 'dark');
-
-      btn.addEventListener('click', function () {
-        var willBeDark = !body.classList.contains('dark-theme');
-        applyTheme(willBeDark);
-        try {
-          localStorage.setItem('wikiTheme', willBeDark ? 'dark' : 'light');
-        } catch (e) { /* 保存できなくても動作は継続 */ }
-      });
+      btn.addEventListener('click',function(){
+var current=localStorage.getItem('wikiTheme')||'light';
+var next=current==='light'?'dark':current==='dark'?'neon':'light';
+applyTheme(next);
+try{localStorage.setItem('wikiTheme',next);}catch(e){}
+});
 
       /* はぐれメタルの遺言ボタン：クリックでMP3を再生 */
       var hagureBtn = document.getElementById('hagureBtn');
