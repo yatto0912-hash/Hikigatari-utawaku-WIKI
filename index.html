@@ -12,16 +12,12 @@
       --header-text: #ffffff;
       --bg-content: #eeeeee;
       --bg-res: #f5f5f5;
-      --bg-res-alt: #e9f7e9;
       --border-color: #999999;
       --border-strong: #333333;
       --text-main: #000000;
       --text-muted: #555555;
       --name-color: #008000;
-      --date-color: #555555;
-      --res-num-bg: #cfcfcf;
       --link-color: #0000ee;
-      --link-visited: #551a8b;
       --accent: #cc0000;
     }
 
@@ -32,16 +28,12 @@
       --header-text: #00ff66;
       --bg-content: #111511;
       --bg-res: #131813;
-      --bg-res-alt: #182018;
       --border-color: #2f3f2f;
       --border-strong: #3f5f3f;
       --text-main: #cfe8cf;
       --text-muted: #7fa87f;
       --name-color: #33ff66;
-      --date-color: #6fbf6f;
-      --res-num-bg: #1f2a1f;
       --link-color: #55aaff;
-      --link-visited: #b388ff;
       --accent: #ff5555;
     }
 
@@ -59,7 +51,7 @@
       transition: background 0.2s, color 0.2s;
     }
 
-    /* ===== 掲示板ヘッダー ===== */
+    /* ===== ヘッダー ===== */
     .board-header {
       background: var(--bg-header);
       color: var(--header-text);
@@ -77,11 +69,6 @@
       width: auto;
       vertical-align: middle;
       margin-right: 8px;
-    }
-    .board-sub {
-      font-size: 0.75rem;
-      opacity: 0.85;
-      margin-top: 2px;
     }
 
     /* ===== ナビゲーションバー ===== */
@@ -114,6 +101,7 @@
     }
     .theme-toggle:hover { border-color: var(--accent); }
 
+    /* ===== メインレイアウト（2カラム） ===== */
     .wiki-container {
       display: flex;
       flex: 1;
@@ -128,7 +116,6 @@
       border-right: 1px solid var(--border-color);
       background: var(--bg-content);
     }
-    .sidebar-section { margin-bottom: 20px; }
     .sidebar-title {
       font-size: 0.75rem;
       color: var(--text-muted);
@@ -147,18 +134,20 @@
       background: var(--bg-page);
     }
 
-    .thread-title {
-      background: var(--bg-content);
-      border: 1px solid var(--border-strong);
-      padding: 8px 12px;
-      font-size: 1rem;
+    .wiki-title {
+      font-size: 1.6rem;
       font-weight: bold;
-      margin-bottom: 4px;
+      margin: 0 0 4px 0;
+      color: var(--text-main);
     }
-    .thread-sub {
-      font-size: 0.7rem;
+    .wiki-subtitle {
+      font-size: 0.75rem;
       color: var(--text-muted);
-      margin-bottom: 16px;
+      margin-bottom: 12px;
+    }
+    .wiki-line {
+      border-bottom: 2px solid var(--border-strong);
+      margin-bottom: 20px;
     }
 
     .top-image-container {
@@ -188,34 +177,27 @@
       margin: 20px 0 10px 0;
     }
 
-    .res-list { border: 1px solid var(--border-color); }
-    .res-block {
+    /* ===== メンバー一覧（カードグリッド） ===== */
+    .member-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .member-link { text-decoration: none; color: inherit; display: block; }
+    .member-card {
+      background: var(--bg-res);
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
-      border-bottom: 1px solid var(--border-color);
-      background: var(--bg-res);
-      text-decoration: none;
-      color: inherit;
+      gap: 8px;
     }
-    .res-block:nth-child(even) { background: var(--bg-res-alt); }
-    .res-block:hover { outline: 1px dashed var(--accent); }
-    .res-num {
-      background: var(--res-num-bg);
-      color: var(--text-main);
-      font-weight: bold;
-      font-size: 0.75rem;
-      padding: 2px 6px;
-      border-radius: 2px;
-      min-width: 22px;
-      text-align: center;
-      flex-shrink: 0;
+    .member-link:hover .member-card {
+      border-color: var(--accent);
     }
-    .res-meta { display: flex; flex-direction: column; }
-    .res-name { color: var(--name-color); font-weight: bold; font-size: 0.95rem; }
-    .res-date { color: var(--date-color); font-size: 0.7rem; }
-    .res-arrow { margin-left: auto; color: var(--link-color); font-size: 0.8rem; flex-shrink: 0; }
+    .member-dot { color: var(--name-color); font-size: 0.8rem; }
+    .member-name { font-size: 1rem; font-weight: bold; color: var(--name-color); }
+    .member-link:hover .member-name { text-decoration: underline; }
 
     footer {
       padding: 14px;
@@ -235,13 +217,12 @@
 <body>
 
   <div class="board-header">
-    <div class="board-title"><img src="images/ROGO.png" alt="ロゴ">■ ひきがたり・うたわくWIKI掲示板 ■</div>
-    <div class="board-sub">かきこみ自由・age推奨・sage進行禁止</div>
+    <div class="board-title"><img src="images/ROGO.png" alt="ロゴ">■ ひきがたり・うたわくWIKI ■</div>
   </div>
 
   <div class="nav-bar">
     <div class="nav-links">
-      [ <a href="#">掲示板トップ</a><span class="sep">|</span><a href="https://line.me" target="_blank">公式オープンチャット</a><span class="sep">|</span><a href="#">最近の更新</a><span class="sep">|</span><a href="#">過去ログ</a> ]
+      [ <a href="index.html">ホームページ</a><span class="sep">|</span><a href="https://line.me" target="_blank">公式オープンチャット</a> ]
     </div>
     <button class="theme-toggle" id="themeToggleBtn" type="button" aria-label="テーマ切り替え">
       <span class="icon" id="themeIcon">☀️</span>
@@ -251,26 +232,17 @@
 
   <div class="wiki-container">
     <aside class="wiki-sidebar">
-      <div class="sidebar-section">
-        <div class="sidebar-title">案内</div>
-        <ul class="sidebar-links">
-          <li><a href="#">メインページ</a></li>
-          <li><a href="https://line.me" target="_blank">公式オープンチャット</a></li>
-          <li><a href="#">最近の更新</a></li>
-        </ul>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">ツール</div>
-        <ul class="sidebar-links">
-          <li><a href="#">リンク元</a></li>
-          <li><a href="#">特別ページ</a></li>
-        </ul>
-      </div>
+      <div class="sidebar-title">案内</div>
+      <ul class="sidebar-links">
+        <li><a href="index.html">ホームページ</a></li>
+        <li><a href="https://line.me" target="_blank">公式オープンチャット</a></li>
+      </ul>
     </aside>
 
     <main>
-      <div class="thread-title">【まとめ】弾き語り・歌枠チームメンバー一覧【15人】</div>
-      <div class="thread-sub">出典: フリー百科事典『ウィキペディア（Wikipedia）』風 ／ レス数 15</div>
+      <h1 class="wiki-title">弾き語り・歌枠チーム</h1>
+      <div class="wiki-subtitle">出典: フリー百科事典『ウィキペディア（Wikipedia）』風</div>
+      <div class="wiki-line"></div>
 
       <div class="top-image-container">
         <img src="images/ROGO.png" alt="ひきがたりうたわくWIKI">
@@ -281,83 +253,23 @@
         本稿では、所属する主要メンバー15名の一覧およびそれぞれの詳細情報について記述する。
       </p>
 
-      <div class="section-title">所属メンバー一覧（レス一覧）</div>
-      <div class="res-list">
-        <a href="profile/aki.html" class="res-block">
-          <span class="res-num">1</span>
-          <span class="res-meta"><span class="res-name">あき</span><span class="res-date">2026/07/23(木)</span></span>
-          <span class="res-arrow">詳細を見る →</span>
-        </a>
-        <a href="profile/hagure.html" class="res-block">
-          <span class="res-num">2</span>
-          <span class="res-meta"><span class="res-name">はぐれメタル</span><span class="res-date">2026/07/23(木)</span></span>
-          <span class="res-arrow">詳細を見る →</span>
-        </a>
-        <a href="profile/onkyo.html" class="res-block">
-          <span class="res-num">3</span>
-          <span class="res-meta"><span class="res-name">音響</span><span class="res-date">2026/07/23(木)</span></span>
-          <span class="res-arrow">詳細を見る →</span>
-        </a>
-        <a href="profile/hikigatari.html" class="res-block">
-          <span class="res-num">4</span>
-          <span class="res-meta"><span class="res-name">弾き語り</span><span class="res-date">2026/07/23(木)</span></span>
-          <span class="res-arrow">詳細を見る →</span>
-        </a>
-        <a href="profile/sinister.html" class="res-block">
-          <span class="res-num">5</span>
-          <span class="res-meta"><span class="res-name">シニスター</span><span class="res-date">2026/07/23(木)</span></span>
-          <span class="res-arrow">詳細を見る →</span>
-        </a>
-        <a href="profile/ankoro.html" class="res-block">
-          <span class="res-num">6</span>
-          <span class="res-meta"><span class="res-name">あんころ</span><span class="res-date">2026/07/23(木)</span></span>
-          <span class="res-arrow">詳細を見る →</span>
-        </a>
-        <a href="profile/tanmen.html" class="res-block">
-          <span class="res-num">7</span>
-          <span class="res-meta"><span class="res-name">たんめん</span><span class="res-date">2026/07/23(木)</span></span>
-          <span class="res-arrow">詳細を見る →</span>
-        </a>
-        <a href="profile/toki.html" class="res-block">
-          <span class="res-num">8</span>
-          <span class="res-meta"><span class="res-name">とき</span><span class="res-date">2026/07/23(木)</span></span>
-          <span class="res-arrow">詳細を見る →</span>
-        </a>
-        <a href="profile/pokochiva.html" class="res-block">
-          <span class="res-num">9</span>
-          <span class="res-meta"><span class="res-name">ぽこチワワ</span><span class="res-date">2026/07/23(木)</span></span>
-          <span class="res-arrow">詳細を見る →</span>
-        </a>
-        <a href="profile/potatofly.html" class="res-block">
-          <span class="res-num">10</span>
-          <span class="res-meta"><span class="res-name">ぽたとふらい</span><span class="res-date">2026/07/23(木)</span></span>
-          <span class="res-arrow">詳細を見る →</span>
-        </a>
-        <a href="profile/mikun.html" class="res-block">
-          <span class="res-num">11</span>
-          <span class="res-meta"><span class="res-name">みーくん</span><span class="res-date">2026/07/23(木)</span></span>
-          <span class="res-arrow">詳細を見る →</span>
-        </a>
-        <a href="profile/yu.html" class="res-block">
-          <span class="res-num">12</span>
-          <span class="res-meta"><span class="res-name">ゆー</span><span class="res-date">2026/07/23(木)</span></span>
-          <span class="res-arrow">詳細を見る →</span>
-        </a>
-        <a href="profile/walworld.html" class="res-block">
-          <span class="res-num">13</span>
-          <span class="res-meta"><span class="res-name">ワールワールド</span><span class="res-date">2026/07/23(木)</span></span>
-          <span class="res-arrow">詳細を見る →</span>
-        </a>
-        <a href="profile/hokori.html" class="res-block">
-          <span class="res-num">14</span>
-          <span class="res-meta"><span class="res-name">ホコリ</span><span class="res-date">2026/07/23(木)</span></span>
-          <span class="res-arrow">詳細を見る →</span>
-        </a>
-        <a href="profile/chibikava.html" class="res-block">
-          <span class="res-num">15</span>
-          <span class="res-meta"><span class="res-name">ちびかわ</span><span class="res-date">2026/07/23(木)</span></span>
-          <span class="res-arrow">詳細を見る →</span>
-        </a>
+      <div class="section-title">メンバー一覧</div>
+      <div class="member-grid">
+        <a href="profile/aki.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">あき</div></div></a>
+        <a href="profile/hagure.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">はぐれメタル</div></div></a>
+        <a href="profile/onkyo.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">音響</div></div></a>
+        <a href="profile/hikigatari.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">弾き語り</div></div></a>
+        <a href="profile/sinister.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">シニスター</div></div></a>
+        <a href="profile/ankoro.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">あんころ</div></div></a>
+        <a href="profile/tanmen.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">たんめん</div></div></a>
+        <a href="profile/toki.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">とき</div></div></a>
+        <a href="profile/pokochiva.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ぽこチワワ</div></div></a>
+        <a href="profile/potatofly.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ぽたとふらい</div></div></a>
+        <a href="profile/mikun.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">みーくん</div></div></a>
+        <a href="profile/yu.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ゆー</div></div></a>
+        <a href="profile/walworld.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ワールワールド</div></div></a>
+        <a href="profile/hokori.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ホコリ</div></div></a>
+        <a href="profile/chibikava.html" class="member-link"><div class="member-card"><span class="member-dot">■</span><div class="member-name">ちびかわ</div></div></a>
       </div>
     </main>
   </div>
