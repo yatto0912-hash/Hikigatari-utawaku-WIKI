@@ -340,11 +340,11 @@
       <div class="section-title">みんなの名言集</div>
       <div class="quote-list">
         <div class="quote-card">
-          <p class="quote-text">「すべての道はロリに通ず」</p>
+          <p class="quote-text">「歌える機会があったら歌いまぁす！よろしくな！」</p>
           <div class="quote-author">はぐれメタル</div>
         </div>
         <div class="quote-card">
-          <p class="quote-text">「ルールは破るためにある」</p>
+          <p class="quote-text">「特にすごいことはしていません。webサイトのエンジニアリングを行っています。末長くよろしく〜」</p>
           <div class="quote-author">音響</div>
         </div>
         <div class="quote-card">
@@ -352,6 +352,8 @@
           <div class="quote-author">ぽこチワワ</div>
         </div>
       </div>
+      <!-- 名言集までスクロールしたらEscort.mp3を再生 -->
+      <audio id="escortAudio" src="audio/Escort.mp3" preload="none"></audio>
     </main>
   </div>
 
@@ -394,6 +396,24 @@
           hagureAudio.currentTime = 0;
           hagureAudio.play();
         });
+      }
+
+      /* 名言集セクションが画面に入ったらEscort.mp3を1回だけ再生 */
+      var escortAudio = document.getElementById('escortAudio');
+      var quoteSection = document.querySelector('.quote-list');
+      if (escortAudio && quoteSection && 'IntersectionObserver' in window) {
+        var escortPlayed = false;
+        var escortObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting && !escortPlayed) {
+              escortPlayed = true;
+              escortAudio.currentTime = 0;
+              escortAudio.play();
+              escortObserver.disconnect();
+            }
+          });
+        }, { threshold: 0.3 });
+        escortObserver.observe(quoteSection);
       }
     })();
   </script>
