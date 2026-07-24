@@ -425,6 +425,7 @@
   <!-- GSAP本体とScrollTriggerプラグイン（アニメーション用） -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
 
   <script>
     (function () {
@@ -450,7 +451,7 @@
       var saved = null;
       try {
         saved = localStorage.getItem('wikiTheme');
-      } catch (e) 
+      } catch (e) { /* エラー処理 */ }
       applyTheme(themeOrder.indexOf(saved) !== -1 ? saved : 'light');
 
       btn.addEventListener('click', function () {
@@ -487,55 +488,276 @@
 
   <script>
     if (window.gsap) {
-      // ページを開いた瞬間：ヘッダー上から出す
-      gsap.from(".board-header", {
-        y: -24,
+      gsap.registerPlugin(ScrollTrigger, TextPlugin);
+
+      // ===== ページロード時のアニメーション =====
+      const tl = gsap.timeline();
+
+      // ヘッダーが上からスライドイン
+      tl.from(".board-header", {
+        y: -50,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out"
+      })
+      // ナビゲーションバーがフェードイン
+      .from(".nav-bar", {
+        y: -20,
         opacity: 0,
         duration: 0.6,
         ease: "power2.out"
-      });
-
-      gsap.from(".wiki-title, .wiki-subtitle, .wiki-line", {
-        y: 12,
+      }, "-=0.4")
+      // サイドバーが左からスライドイン
+      .from(".wiki-sidebar", {
+        x: -30,
+        opacity: 0,
+        duration: 0.7,
+        ease: "power2.out"
+      }, "-=0.3")
+      // メインコンテンツがフェードイン
+      .from("main", {
+        opacity: 0,
+        y: 30,
+        duration: 0.8,
+        ease: "power2.out"
+      }, "-=0.4")
+      // タイトルが左からスライド
+      .from(".wiki-title", {
+        x: -40,
         opacity: 0,
         duration: 0.6,
-        delay: 0.15,
+        ease: "power3.out"
+      }, "-=0.5")
+      // サブタイトルが右からスライド
+      .from(".wiki-subtitle", {
+        x: 40,
+        opacity: 0,
+        duration: 0.5,
         ease: "power2.out"
+      }, "-=0.4")
+      // ラインが中央から広がる
+      .from(".wiki-line", {
+        scaleX: 0,
+        transformOrigin: "center",
+        duration: 0.4,
+        ease: "power2.out"
+      }, "-=0.3")
+      // トップ画像がズームイン
+      .from(".top-image-container", {
+        scale: 0.8,
+        opacity: 0,
+        duration: 0.8,
+        ease: "back.out(1.7)"
+      }, "-=0.3")
+      // リード文がフェードイン
+      .from(".wiki-lead", {
+        y: 20,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.out"
+      }, "-=0.4")
+      // はぐれメタルボタンがバウンス
+      .from(".hagure-button", {
+        y: 30,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.1,
+        ease: "back.out(1.7)"
+      }, "-=0.3");
+
+      // ===== スクロールトリガーアニメーション =====
+      
+      // セクションタイトルが下からスライド
+      gsap.utils.toArray(".section-title").forEach(title => {
+        gsap.from(title, {
+          scrollTrigger: {
+            trigger: title,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          },
+          y: 30,
+          opacity: 0,
+          duration: 0.6,
+          ease: "power2.out"
+        });
       });
 
-      if (window.ScrollTrigger) {
-        gsap.registerPlugin(ScrollTrigger);
-
-        // メンバー一覧：カードが1枚ずつ順番にドパドパ出てくる
-        gsap.utils.toArray(".member-link").forEach(function (card, i) {
-          gsap.from(card, {
-            scrollTrigger: {
-              trigger: card,
-              start: "top 92%"
-            },
-            opacity: 0,
-            y: 16,
-            duration: 0.4,
-            delay: (i % 5) * 0.05,
-            ease: "power1.out"
-          });
+      // メンバーカードがスタガードで登場（3D回転付き）
+      gsap.utils.toArray(".member-link").forEach((card, i) => {
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            toggleActions: "play none none reverse"
+          },
+          opacity: 0,
+          y: 40,
+          rotationX: 15,
+          rotationY: -15,
+          duration: 0.7,
+          delay: (i % 5) * 0.08,
+          ease: "power3.out"
         });
 
-        // 名言集：カードが左からバーってしながら出てくる
-        gsap.utils.toArray(".quote-card").forEach(function (card, i) {
-          gsap.from(card, {
-            scrollTrigger: {
-              trigger: card,
-              start: "top 90%"
-            },
-            opacity: 0,
-            x: -24,
-            duration: 0.5,
-            delay: i * 0.1,
+        // ホバーエフェクト
+        card.addEventListener("mouseenter", () => {
+          gsap.to(card.querySelector(".member-card"), {
+            scale: 1.05,
+            y: -5,
+            duration: 0.3,
             ease: "power2.out"
           });
         });
+
+        card.addEventListener("mouseleave", () => {
+          gsap.to(card.querySelector(".member-card"), {
+            scale: 1,
+            y: 0,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        });
+      });
+
+      // 名言カードが左右交互にスライド
+      gsap.utils.toArray(".quote-card").forEach((card, i) => {
+        const direction = i % 2 === 0 ? -50 : 50;
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          },
+          opacity: 0,
+          x: direction,
+          rotation: i % 2 === 0 ? -5 : 5,
+          duration: 0.8,
+          delay: i * 0.15,
+          ease: "power3.out"
+        });
+      });
+
+      // フッターが下からフェードイン
+      gsap.from("footer", {
+        scrollTrigger: {
+          trigger: footer,
+          start: "top 95%",
+          toggleActions: "play none none reverse"
+        },
+        y: 30,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.out"
+      });
+
+      // パララックス効果
+      gsap.to(".top-image-container", {
+        scrollTrigger: {
+          trigger: ".top-image-container",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1
+        },
+        y: 50,
+        ease: "none"
+      });
+
+      // テーマ切り替え時のトランジション
+      const themeBtn = document.getElementById('themeToggleBtn');
+      if (themeBtn) {
+        themeBtn.addEventListener('click', () => {
+          gsap.to("body", {
+            opacity: 0.8,
+            duration: 0.2,
+            yoyo: true,
+            repeat: 1,
+            ease: "power2.inOut"
+          });
+        });
       }
+
+      // ボタンホバーエフェクト
+      gsap.utils.toArray(".hagure-button, .theme-toggle").forEach(btn => {
+        btn.addEventListener("mouseenter", () => {
+          gsap.to(btn, {
+            scale: 1.08,
+            duration: 0.2,
+            ease: "power2.out"
+          });
+        });
+
+        btn.addEventListener("mouseleave", () => {
+          gsap.to(btn, {
+            scale: 1,
+            duration: 0.2,
+            ease: "power2.out"
+          });
+        });
+
+        btn.addEventListener("mousedown", () => {
+          gsap.to(btn, {
+            scale: 0.95,
+            duration: 0.1,
+            ease: "power2.out"
+          });
+        });
+
+        btn.addEventListener("mouseup", () => {
+          gsap.to(btn, {
+            scale: 1.08,
+            duration: 0.1,
+            ease: "power2.out"
+          });
+        });
+      });
+
+      // サイドバーリンクのホバーエフェクト
+      gsap.utils.toArray(".sidebar-links a").forEach(link => {
+        link.addEventListener("mouseenter", () => {
+          gsap.to(link, {
+            x: 5,
+            color: "var(--accent)",
+            duration: 0.2,
+            ease: "power2.out"
+          });
+        });
+
+        link.addEventListener("mouseleave", () => {
+          gsap.to(link, {
+            x: 0,
+            color: "var(--link-color)",
+            duration: 0.2,
+            ease: "power2.out"
+          });
+        });
+      });
+
+      // ドパがきモード時の追加アニメーション
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === 'class') {
+            if (document.body.classList.contains('dopagaki-theme')) {
+              // ドパがきモード時の激しいアニメーション
+              gsap.to(".member-card", {
+                rotation: gsap.utils.random(-5, 5),
+                duration: 0.3,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut"
+              });
+            } else {
+              // 通常モードに戻った時
+              gsap.to(".member-card", {
+                rotation: 0,
+                duration: 0.5,
+                ease: "power2.out"
+              });
+            }
+          }
+        });
+      });
+
+      observer.observe(document.body, { attributes: true });
     }
   </script>
 
