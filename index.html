@@ -37,6 +37,63 @@
       --accent: #ff5555;
     }
 
+    /* ===== ドパがきモード（3つ目のテーマ・全体虹色高速演出） ===== */
+    body.dopagaki-theme {
+      --bg-page: #111111;
+      --bg-header: #000000;
+      --header-text: #ffffff;
+      --bg-content: #1a1a1a;
+      --bg-res: #202020;
+      --border-color: #ff2ec4;
+      --border-strong: #ffffff;
+      --text-main: #ffffff;
+      --text-muted: #dddddd;
+      --name-color: #ffee00;
+      --link-color: #00e5ff;
+      --accent: #ff2ec4;
+    }
+    /* ページ全体の色相を高速でぐるぐる回して虹色に */
+    body.dopagaki-theme {
+      animation: dopaHue 2.2s linear infinite;
+    }
+    @keyframes dopaHue {
+      from { filter: hue-rotate(0deg) saturate(1.6); }
+      to   { filter: hue-rotate(360deg) saturate(1.6); }
+    }
+    /* 主要な枠線を虹色にパカパカ切り替える */
+    @keyframes dopaBorder {
+      0%   { border-color: #ff004c; }
+      16%  { border-color: #ff8a00; }
+      33%  { border-color: #ffe600; }
+      50%  { border-color: #00ff6a; }
+      66%  { border-color: #00d4ff; }
+      83%  { border-color: #7a00ff; }
+      100% { border-color: #ff004c; }
+    }
+    body.dopagaki-theme .board-header,
+    body.dopagaki-theme .member-card,
+    body.dopagaki-theme .quote-card,
+    body.dopagaki-theme .profile-container,
+    body.dopagaki-theme .top-image-container,
+    body.dopagaki-theme .wiki-lead,
+    body.dopagaki-theme .hagure-button,
+    body.dopagaki-theme .theme-toggle,
+    body.dopagaki-theme .back-button {
+      animation: dopaBorder 1s linear infinite;
+      border-width: 3px !important;
+    }
+    /* タイトル文字も高速で揺れさせて「ドパがき」になるぜ俺は */
+    @keyframes dopaShake {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(1px, -1px) rotate(-1deg); }
+      50% { transform: translate(-1px, 1px) rotate(1deg); }
+      75% { transform: translate(1px, 1px) rotate(-1deg); }
+    }
+    body.dopagaki-theme .board-title,
+    body.dopagaki-theme .wiki-title {
+      animation: dopaShake 0.25s linear infinite;
+    }
+
     * { box-sizing: border-box; }
 
     body {
@@ -202,6 +259,9 @@
     .hagure-button:active {
       transform: scale(0.98);
     }
+    .hagure-audio-box button + button {
+      margin-left: 10px;
+    }
 
     .section-title {
       font-weight: bold;
@@ -211,7 +271,7 @@
       margin: 20px 0 10px 0;
     }
 
-    /* ===== メンバー一覧（カードグリッド） ===== */
+    /* メンバー一覧*/
     .member-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -242,7 +302,7 @@
       background: var(--bg-content);
     }
 
-    /* ===== みんなの名言集 ===== */
+    /*  みんなの名言集  */
     .quote-list {
       display: flex;
       flex-direction: column;
@@ -307,10 +367,13 @@
         <img src="images/ROGO.png" alt="ひきがたりうたわくWIKI">
       </div>
 
-      <!-- はぐれメタルの遺言：ボタンを押すとMP3音声を再生 -->
+      <!-- はぐれメタルの遺言／エスコート再生ボタンを押すとMP3音声を再生しますタタタタたったタタタタッタタ -->
       <div class="hagure-audio-box">
         <button id="hagureBtn" class="hagure-button" type="button">📜 はぐれメタルの遺言</button>
+        <button id="escortBtn" class="hagure-button" type="button">🎧 エスコート再生</button>
         <audio id="hagureAudio" src="audio/HagureYuigon.mp3" preload="none"></audio>
+        <audio id="escortAudio" src="audio/Escort.mp3" preload="none"></audio>
+        <audio id="escortWareAudio" src="audio/OtowareEscort.mp3" preload="none"></audio>
       </div>
 
       <p class="wiki-lead">
@@ -370,27 +433,35 @@
       var icon = document.getElementById('themeIcon');
       var label = document.getElementById('themeLabel');
 
-      function applyTheme(isDark) {
-        body.classList.toggle('dark-theme', isDark);
-        icon.textContent = isDark ? '🌙' : '☀️';
-        label.textContent = isDark ? 'ダーク' : 'ライト';
+      var themeOrder = ['light', 'dark', 'dopagaki'];
+      var themeIcons = { light: '☀️', dark: '🌙', dopagaki: '🌈' };
+      var themeLabels = { light: 'ライト', dark: 'ダーク', dopagaki: 'ドパがき' };
+      var currentTheme = 'light';
+
+      function applyTheme(theme) {
+        body.classList.remove('dark-theme', 'dopagaki-theme');
+        if (theme === 'dark') body.classList.add('dark-theme');
+        if (theme === 'dopagaki') body.classList.add('dopagaki-theme');
+        icon.textContent = themeIcons[theme];
+        label.textContent = themeLabels[theme];
+        currentTheme = theme;
       }
 
       var saved = null;
       try {
         saved = localStorage.getItem('wikiTheme');
-      } catch (e) { /* localStorageが使えない環境でも無視 */ }
-      applyTheme(saved === 'dark');
+      } catch (e) 
+      applyTheme(themeOrder.indexOf(saved) !== -1 ? saved : 'light');
 
       btn.addEventListener('click', function () {
-        var willBeDark = !body.classList.contains('dark-theme');
-        applyTheme(willBeDark);
+        var nextTheme = themeOrder[(themeOrder.indexOf(currentTheme) + 1) % themeOrder.length];
+        applyTheme(nextTheme);
         try {
-          localStorage.setItem('wikiTheme', willBeDark ? 'dark' : 'light');
+          localStorage.setItem('wikiTheme', nextTheme);
         } catch (e) { /* 保存できなくても動作は継続 */ }
       });
 
-      /* はぐれメタルの遺言ボタン：クリックでMP3を再生 */
+      /* はぐれメタルの遺言ボタンクリックでMP3を再生 */
       var hagureBtn = document.getElementById('hagureBtn');
       var hagureAudio = document.getElementById('hagureAudio');
       if (hagureBtn && hagureAudio) {
@@ -399,13 +470,24 @@
           hagureAudio.play();
         });
       }
+
+      /* クリックでMP3を再生（ドパがきモード中は音割れ版） */
+      var escortBtn = document.getElementById('escortBtn');
+      var escortAudio = document.getElementById('escortAudio');
+      var escortWareAudio = document.getElementById('escortWareAudio');
+      if (escortBtn && escortAudio && escortWareAudio) {
+        escortBtn.addEventListener('click', function () {
+          var target = body.classList.contains('dopagaki-theme') ? escortWareAudio : escortAudio;
+          target.currentTime = 0;
+          target.play();
+        });
+      }
     })();
   </script>
 
-  <!-- ===== GSAPアニメーション ===== -->
   <script>
     if (window.gsap) {
-      // ページを開いた瞬間：ヘッダー部分をふわっと上から出す
+      // ページを開いた瞬間：ヘッダー上から出す
       gsap.from(".board-header", {
         y: -24,
         opacity: 0,
@@ -421,11 +503,10 @@
         ease: "power2.out"
       });
 
-      // ScrollTriggerが読み込めている場合だけスクロール連動アニメーションを設定
       if (window.ScrollTrigger) {
         gsap.registerPlugin(ScrollTrigger);
 
-        // メンバー一覧：カードが1枚ずつ順番にふわっと出てくる
+        // メンバー一覧：カードが1枚ずつ順番にドパドパ出てくる
         gsap.utils.toArray(".member-link").forEach(function (card, i) {
           gsap.from(card, {
             scrollTrigger: {
@@ -440,7 +521,7 @@
           });
         });
 
-        // 名言集：カードが左からスライドしながら出てくる
+        // 名言集：カードが左からバーってしながら出てくる
         gsap.utils.toArray(".quote-card").forEach(function (card, i) {
           gsap.from(card, {
             scrollTrigger: {
