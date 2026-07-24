@@ -567,13 +567,18 @@
       }, "-=0.3");
 
       // ===== スクロールトリガーアニメーション =====
-      
+      // 注意: start の閾値は「画面下からどれだけ入ったら発火するか」を示す。
+      // ページ末尾に近い要素はスクロール可能な最大量が足りず、
+      // 閾値に達する前にスクロールが止まってしまうことがある（特にスマホ）。
+      // そのため閾値を緩め（要素が画面下から見え始めた時点で発火）、
+      // 常に表示されるようにしている。
+
       // セクションタイトルが下からスライド
       gsap.utils.toArray(".section-title").forEach(title => {
         gsap.from(title, {
           scrollTrigger: {
             trigger: title,
-            start: "top 85%",
+            start: "top 98%",
             toggleActions: "play none none reverse"
           },
           y: 30,
@@ -588,7 +593,7 @@
         gsap.from(card, {
           scrollTrigger: {
             trigger: card,
-            start: "top 90%",
+            start: "top 98%",
             toggleActions: "play none none reverse"
           },
           opacity: 0,
@@ -626,7 +631,7 @@
         gsap.from(card, {
           scrollTrigger: {
             trigger: card,
-            start: "top 85%",
+            start: "top 98%",
             toggleActions: "play none none reverse"
           },
           opacity: 0,
@@ -642,7 +647,7 @@
       gsap.from("footer", {
         scrollTrigger: {
           trigger: footer,
-          start: "top 95%",
+          start: "top 98%",
           toggleActions: "play none none reverse"
         },
         y: 30,
@@ -759,6 +764,11 @@
       });
 
       observer.observe(document.body, { attributes: true });
+
+      // スマホのアドレスバー表示/非表示によるビューポート変動、
+      // 画像読み込み完了によるレイアウト変化に対応するためリフレッシュ
+      window.addEventListener("load", () => ScrollTrigger.refresh());
+      window.addEventListener("resize", () => ScrollTrigger.refresh());
     }
   </script>
 
