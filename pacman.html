@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>パックマン - 弾き語り・歌枠 WIKI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg-page: #0d0f0d;
+    --bg-header: #001a00;
+    --header-text: #00ff66;
+    --bg-content: #111511;
+    --border-color: #2f3f2f;
+    --border-strong: #3f5f3f;
+    --text-main: #cfe8cf;
+    --text-muted: #7fa87f;
+    --accent: #ff5555;
+    --link-color: #55aaff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "MS PGothic", "MS Pゴシック", "Hiragino Kaku Gothic ProN", monospace, sans-serif;
+    background: var(--bg-page);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .board-header {
+    width: 100%;
+    background: var(--bg-header);
+    color: var(--header-text);
+    padding: 10px 16px 6px;
+    text-align: center;
+    border-bottom: 3px solid var(--border-strong);
+  }
+  .board-title { font-size: 1.3rem; font-weight: bold; letter-spacing: 0.05em; }
+  .back-link {
+    display: inline-block;
+    margin: 12px 0 4px;
+    font-size: 0.85rem;
+    color: var(--link-color);
+    text-decoration: underline;
+  }
+  #gameWrap {
+    position: relative;
+    margin: 12px 0 20px;
+    border: 2px solid var(--border-strong);
+    background: var(--bg-content);
+    padding: 10px;
+    max-width: 96vw;
+    overflow: auto;
+  }
+  #hud {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+    padding: 0 2px;
+  }
+  #hud span b { color: var(--header-text); }
+  canvas { display: block; background: #000; }
+  #overlay {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+  }
+  #overlay h2 { margin: 0 0 10px; font-size: 1.4rem; }
+  #overlay button {
+    margin-top: 14px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: bold;
+    padding: 8px 20px;
+    background: var(--bg-content);
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  #overlay button:hover { background: var(--accent); color: #fff; }
+  .controls-note {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  footer {
+    padding: 14px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+
+  <div class="board-header">
+    <div class="board-title">■ ひきがたり・うたわくWIKI - パックマン ■</div>
+  </div>
+
+  <a class="back-link" href="index.html">&larr; WIKIトップへ戻る</a>
+  <p class="controls-note">矢印キー / WASD で移動。みーくんお化けに捕まらないように全部のドットを食べろ。<br>お化けはたまにランダムに動いたり足を止めたりする、あほなAI。</p>
+
+  <div id="gameWrap">
+    <div id="hud">
+      <span>SCORE: <b id="scoreVal">0</b></span>
+      <span>残りドット: <b id="dotsVal">0</b></span>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <div id="overlay">
+      <h2 id="overlayTitle">GAME OVER</h2>
+      <p id="overlayMsg"></p>
+      <button id="restartBtn" type="button">もう一度遊ぶ</button>
+    </div>
+  </div>
+
+  <footer>テキストはクリエイティブ・コモンズ 表示・継承ライセンスの下で利用可能です。</footer>
+
+<script>
+(function () {
+  // ===== マップ生成(部屋グリッドを再帰バックトラッカーで生成 → ループを追加して複雑化) =====
+  const MAZE_ROOM_ROWS = 11;   // 部屋の縦数
+  const MAZE_ROOM_COLS = 13;   // 部屋の横数
+  const ROWS = MAZE_ROOM_ROWS * 2 + 1;
+  const COLS = MAZE_ROOM_COLS * 2 + 1;
+  const CELL = 24;
+  const TICK_MS = 170; // 1マス進む間隔
+  const LOOP_CHANCE = 0.14; // 通路をループ状にして複雑にする割合
+
+  const GHOST_COLORS = ['#ff5555', '#ffaa33', '#55e0ff'];
+
+  function roomToGrid(r, c) { return [r * 2 + 1, c * 2 + 1]; }
+
+  function buildMaze() {
+    const grid = [];
+    for (let r = 0; r < ROWS; r++) grid.push(new Array(COLS).fill(1));
+
+    const visited = [];
+    for (let r = 0; r < MAZE_ROOM_ROWS; r++) visited.push(new Array(MAZE_ROOM_COLS).fill(false));
+
+    function carve(r, c) {
+      visited[r][c] = true;
+      const [gr, gc] = roomToGrid(r, c);
+      grid[gr][gc] = 0;
+
+      const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+      for (let i = dirs.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = dirs[i]; dirs[i] = dirs[j]; dirs[j] = tmp;
+      }
+
+      for (const [dr, dc] of dirs) {
+        const nr = r + dr, nc = c + dc;
+        if (nr < 0 || nr >= MAZE_ROOM_ROWS || nc < 0 || nc >= MAZE_ROOM_COLS) continue;
+        if (visited[nr][nc]) continue;
+        grid[gr + dr][gc + dc] = 0; // 部屋間の壁を壊して通路にする
+        carve(nr, nc);
+      }
+    }
+    carve(0, 0);
+
+    // ループを追加して一本道の迷路を複雑にする(袋小路以外の分岐を増やす)
+    for (let r = 0; r < MAZE_ROOM_ROWS; r++) {
+      for (let c = 0; c < MAZE_ROOM_COLS; c++) {
+        const [gr, gc] = roomToGrid(r, c);
+        if (c + 1 < MAZE_ROOM_COLS) {
+          const wc = gc + 1;
+          if (grid[gr][wc] === 1 && Math.random() < LOOP_CHANCE) grid[gr][wc] = 0;
+        }
+        if (r + 1 < MAZE_ROOM_ROWS) {
+          const wr = gr + 1;
+          if (grid[wr][gc] === 1 && Math.random() < LOOP_CHANCE) grid[wr][gc] = 0;
+        }
+      }
+    }
+
+    return grid;
+  }
+
+  let maze = buildMaze();
+
+  const PLAYER_START = { r: 1, c: 1 };
+  const GHOST_STARTS = [
+    (() => { const [r, c] = roomToGrid(0, MAZE_ROOM_COLS - 1); return { r, c }; })(),
+    (() => { const [r, c] = roomToGrid(MAZE_ROOM_ROWS - 1, 0); return { r, c }; })(),
+    (() => { const [r, c] = roomToGrid(MAZE_ROOM_ROWS - 1, MAZE_ROOM_COLS - 1); return { r, c }; })()
+  ];
+
+  let dots;
+  function resetDots() {
+    dots = [];
+    for (let r = 0; r < ROWS; r++) {
+      const row = [];
+      for (let c = 0; c < COLS; c++) {
+        const isPath = maze[r][c] === 0;
+        const isStart = (r === PLAYER_START.r && c === PLAYER_START.c) ||
+          GHOST_STARTS.some(g => g.r === r && g.c === c);
+        row.push(isPath && !isStart);
+      }
+      dots.push(row);
+    }
+  }
+
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = COLS * CELL;
+  canvas.height = ROWS * CELL;
+
+  const scoreVal = document.getElementById('scoreVal');
+  const dotsVal = document.getElementById('dotsVal');
+  const overlay = document.getElementById('overlay');
+  const overlayTitle = document.getElementById('overlayTitle');
+  const overlayMsg = document.getElementById('overlayMsg');
+  const restartBtn = document.getElementById('restartBtn');
+
+  const ghostImg = new Image();
+  ghostImg.src = 'images/mikun.jpg';
+
+  let player, ghosts, dir, nextDir, score, dotsLeft, mouthPhase, running, tickTimer;
+
+  function isWall(r, c) {
+    if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return true;
+    return maze[r][c] === 1;
+  }
+
+  function countDots() {
+    let n = 0;
+    for (let r = 0; r < ROWS; r++)
+      for (let c = 0; c < COLS; c++)
+        if (dots[r][c]) n++;
+    return n;
+  }
+
+  function initGame() {
+    maze = buildMaze();
+    resetDots();
+    player = { r: PLAYER_START.r, c: PLAYER_START.c };
+    ghosts = GHOST_STARTS.map((g, i) => ({
+      r: g.r, c: g.c, color: GHOST_COLORS[i % GHOST_COLORS.length], lastDir: { r: 0, c: 0 }
+    }));
+    dir = { r: 0, c: 0 };
+    nextDir = { r: 0, c: 0 };
+    score = 0;
+    mouthPhase = 0;
+    dotsLeft = countDots();
+    running = true;
+    overlay.style.display = 'none';
+    updateHud();
+    draw();
+  }
+
+  function updateHud() {
+    scoreVal.textContent = score;
+    dotsVal.textContent = dotsLeft;
+  }
+
+  // ===== 弱めのお化けAI =====
+  // 最短経路は計算せず、「たまにランダムに動く」「たまに足を止める」
+  // 「基本はプレイヤーに近づく方向を選ぶだけ(壁を迂回する賢さはない)」という単純な挙動にする。
+  const RANDOM_MOVE_CHANCE = 0.35;
+  const HESITATE_CHANCE = 0.15;
+
+  function ghostNextMove(ghost) {
+    if (Math.random() < HESITATE_CHANCE) {
+      return { r: ghost.r, c: ghost.c }; // その場で足踏み
+    }
+
+    const deltas = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+    const openDirs = deltas.filter(([dr, dc]) => !isWall(ghost.r + dr, ghost.c + dc));
+    if (openDirs.length === 0) return { r: ghost.r, c: ghost.c };
+
+    if (Math.random() < RANDOM_MOVE_CHANCE) {
+      const [dr, dc] = openDirs[Math.floor(Math.random() * openDirs.length)];
+      return { r: ghost.r + dr, c: ghost.c + dc };
+    }
+
+    // 貪欲法: プレイヤーとの直線距離が一番縮む方向を選ぶだけ(経路探索はしない)
+    let best = null;
+    let bestDist = Infinity;
+    for (const [dr, dc] of openDirs) {
+      const nr = ghost.r + dr, nc = ghost.c + dc;
+      const dist = Math.abs(nr - player.r) + Math.abs(nc - player.c);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = { r: nr, c: nc };
+      }
+    }
+    return best || { r: ghost.r, c: ghost.c };
+  }
+
+  function tick() {
+    if (!running) return;
+
+    if (!isWall(player.r + nextDir.r, player.c + nextDir.c)) {
+      dir = nextDir;
+    }
+    if (!isWall(player.r + dir.r, player.c + dir.c)) {
+      player.r += dir.r;
+      player.c += dir.c;
+    }
+
+    if (dots[player.r][player.c]) {
+      dots[player.r][player.c] = false;
+      score += 10;
+      dotsLeft--;
+    }
+
+    for (const ghost of ghosts) {
+      const next = ghostNextMove(ghost);
+      ghost.r = next.r;
+      ghost.c = next.c;
+    }
+
+    updateHud();
+
+    if (ghosts.some(g => g.r === player.r && g.c === player.c)) {
+      endGame(false);
+      return;
+    }
+    if (dotsLeft <= 0) {
+      endGame(true);
+      return;
+    }
+
+    mouthPhase = (mouthPhase + 1) % 6;
+    draw();
+  }
+
+  function endGame(win) {
+    running = false;
+    clearInterval(tickTimer);
+    overlay.style.display = 'flex';
+    if (win) {
+      overlayTitle.textContent = 'CLEAR!';
+      overlayMsg.textContent = '全部のドットを食べきった！ スコア: ' + score;
+    } else {
+      overlayTitle.textContent = 'GAME OVER';
+      overlayMsg.textContent = 'みーくんに捕まった… スコア: ' + score;
+    }
+    draw();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#1b3d1b';
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        if (maze[r][c] === 1) {
+          ctx.fillRect(c * CELL, r * CELL, CELL, CELL);
+        }
+      }
+    }
+
+    ctx.fillStyle = '#ffe066';
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        if (dots[r][c]) {
+          ctx.beginPath();
+          ctx.arc(c * CELL + CELL / 2, r * CELL + CELL / 2, 2.6, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    const px = player.c * CELL + CELL / 2;
+    const py = player.r * CELL + CELL / 2;
+    const radius = CELL / 2 - 2;
+    const mouthAngle = 0.25 * Math.PI * (mouthPhase < 3 ? mouthPhase : 6 - mouthPhase) / 3;
+    let baseAngle = 0;
+    if (dir.r === -1) baseAngle = -Math.PI / 2;
+    else if (dir.r === 1) baseAngle = Math.PI / 2;
+    else if (dir.c === -1) baseAngle = Math.PI;
+    else baseAngle = 0;
+
+    ctx.fillStyle = '#ffe600';
+    ctx.beginPath();
+    ctx.moveTo(px, py);
+    ctx.arc(px, py, radius, baseAngle + mouthAngle, baseAngle - mouthAngle + Math.PI * 2, false);
+    ctx.closePath();
+    ctx.fill();
+
+    for (const ghost of ghosts) {
+      const gx = ghost.c * CELL;
+      const gy = ghost.r * CELL;
+      if (ghostImg.complete && ghostImg.naturalWidth > 0) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(gx + CELL / 2, gy + CELL / 2, CELL / 2 - 1, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(ghostImg, gx, gy, CELL, CELL);
+        ctx.restore();
+        ctx.strokeStyle = ghost.color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(gx + CELL / 2, gy + CELL / 2, CELL / 2 - 1, 0, Math.PI * 2);
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = ghost.color;
+        ctx.beginPath();
+        ctx.arc(gx + CELL / 2, gy + CELL / 2, CELL / 2 - 1, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+
+  function setDir(r, c) {
+    nextDir = { r, c };
+  }
+
+  document.addEventListener('keydown', (e) => {
+    switch (e.key) {
+      case 'ArrowUp': case 'w': case 'W': setDir(-1, 0); e.preventDefault(); break;
+      case 'ArrowDown': case 's': case 'S': setDir(1, 0); e.preventDefault(); break;
+      case 'ArrowLeft': case 'a': case 'A': setDir(0, -1); e.preventDefault(); break;
+      case 'ArrowRight': case 'd': case 'D': setDir(0, 1); e.preventDefault(); break;
+    }
+  });
+
+  restartBtn.addEventListener('click', () => {
+    initGame();
+    clearInterval(tickTimer);
+    tickTimer = setInterval(tick, TICK_MS);
+  });
+
+  initGame();
+  tickTimer = setInterval(tick, TICK_MS);
+})();
+</script>
+
+</body>
+</html>
