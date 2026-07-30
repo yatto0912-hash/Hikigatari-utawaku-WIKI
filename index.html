@@ -77,6 +77,7 @@
     body.dopagaki-theme .top-image-container,
     body.dopagaki-theme .wiki-lead,
     body.dopagaki-theme .hagure-button,
+    body.dopagaki-theme .pacman-button,
     body.dopagaki-theme .theme-toggle,
     body.dopagaki-theme .back-button {
       animation: dopaBorder 1s linear infinite;
@@ -263,6 +264,63 @@
       margin-left: 10px;
     }
 
+    /* ===== pacmanボタン ===== */
+    .pacman-link-box {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .pacman-button {
+      display: inline-block;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: bold;
+      padding: 12px 28px;
+      background: var(--bg-res);
+      border: 2px solid #ffb700;
+      color: #ffb700;
+      border-radius: 4px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .pacman-button:hover {
+      background: #ffb700;
+      color: var(--header-text);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(255, 183, 0, 0.3);
+    }
+
+    .pacman-button:active {
+      transform: scale(0.98);
+    }
+
+    /* ダークモード対応 */
+    body.dark-theme .pacman-button {
+      border-color: #ffcc33;
+      color: #ffcc33;
+    }
+
+    body.dark-theme .pacman-button:hover {
+      background: #ffcc33;
+      color: #001a00;
+      box-shadow: 0 4px 12px rgba(255, 204, 51, 0.4);
+    }
+
+    /* ドパがきモード対応 */
+    body.dopagaki-theme .pacman-button {
+      border-color: #ffff00;
+      color: #ffff00;
+      animation: dopaBorder 1s linear infinite;
+    }
+
+    body.dopagaki-theme .pacman-button:hover {
+      background: #ffff00;
+      color: #000000;
+      box-shadow: 0 4px 12px rgba(255, 255, 0, 0.6);
+    }
+
     .section-title {
       font-weight: bold;
       font-size: 0.95rem;
@@ -376,6 +434,11 @@
         <audio id="escortWareAudio" src="audio/OtowareEscort.mp3" preload="none"></audio>
       </div>
 
+      <!-- pacmanゲームへのボタン -->
+      <div class="pacman-link-box">
+        <a href="pacman.html" class="pacman-button">🎮 PAC-MAN ゲーム開始</a>
+      </div>
+
       <p class="wiki-lead">
         <b>弾き語り・歌枠チーム</b>とは、音楽活動や配信を中心に行うクリエイターグループである。
         本稿では、所属する主要メンバー一覧およびそれぞれの詳細情報について記述する。         と、AIが言ってる、ちなみに配信なんてしてないで  
@@ -418,7 +481,7 @@
           <p class="quote-text">「毎日一回以上確定でカラオケしてます」</p>
           <div class="quote-author">ぽこチワワ</div>
         </div>
-         <div class="quote-card">
+        <div class="quote-card">
           <p class="quote-text">「あー　
             ケーキ食べたいのにお金がないな　
             窃盗するか　
@@ -429,6 +492,7 @@
             三日？　
             ショート刑期」</p>
           <div class="quote-author">みーくん</div>
+        </div>
       </div>
     </main>
   </div>
@@ -578,7 +642,14 @@
         duration: 0.5,
         stagger: 0.1,
         ease: "back.out(1.7)"
-      }, "-=0.3");
+      }, "-=0.3")
+      // pacmanボタンがバウンス
+      .from(".pacman-button", {
+        y: 30,
+        opacity: 0,
+        duration: 0.5,
+        ease: "back.out(1.7)"
+      }, "-=0.2");
 
       // ===== スクロールトリガーアニメーション =====
       // 注意: start の閾値は「画面下からどれだけ入ったら発火するか」を示す。
@@ -660,7 +731,7 @@
       // フッターが下からフェードイン
       gsap.from("footer", {
         scrollTrigger: {
-          trigger: footer,
+          trigger: "footer",
           start: "top 98%",
           toggleActions: "play none none reverse"
         },
@@ -697,7 +768,7 @@
       }
 
       // ボタンホバーエフェクト
-      gsap.utils.toArray(".hagure-button, .theme-toggle").forEach(btn => {
+      gsap.utils.toArray(".hagure-button, .pacman-button, .theme-toggle").forEach(btn => {
         btn.addEventListener("mouseenter", () => {
           gsap.to(btn, {
             scale: 1.08,
