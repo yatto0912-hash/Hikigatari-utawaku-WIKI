@@ -268,10 +268,11 @@
     .pacman-link-box {
       text-align: center;
       margin: 20px 0;
+      display: block;
     }
 
     .pacman-button {
-      display: inline-block;
+      display: inline-block !important;
       font-family: inherit;
       font-size: 0.95rem;
       font-weight: bold;
@@ -283,6 +284,7 @@
       text-decoration: none;
       cursor: pointer;
       transition: all 0.15s;
+      line-height: 1.5;
     }
 
     .pacman-button:hover {
@@ -310,7 +312,7 @@
 
     /* ドパがきモード対応 */
     body.dopagaki-theme .pacman-button {
-      border-color: #ffff00;
+      border-color: #ffff00 !important;
       color: #ffff00;
       animation: dopaBorder 1s linear infinite;
     }
@@ -652,12 +654,6 @@
       }, "-=0.2");
 
       // ===== スクロールトリガーアニメーション =====
-      // 注意: start の閾値は「画面下からどれだけ入ったら発火するか」を示す。
-      // ページ末尾に近い要素はスクロール可能な最大量が足りず、
-      // 閾値に達する前にスクロールが止まってしまうことがある（特にスマホ）。
-      // そのため閾値を緩め（要素が画面下から見え始めた時点で発火）、
-      // 常に表示されるようにしている。
-
       // セクションタイトルが下からスライド
       gsap.utils.toArray(".section-title").forEach(title => {
         gsap.from(title, {
